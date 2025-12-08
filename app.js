@@ -1,7 +1,6 @@
 import "dotenv/config";
 import path from "node:path";
 
-import authRouter from "./routes/authRouter.js";
 import express from "express";
 import cors from "cors";
 import connectDB from "./db/connection.js";
