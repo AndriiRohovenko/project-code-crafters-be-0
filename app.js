@@ -1,7 +1,6 @@
 import "dotenv/config";
 import path from "node:path";
 
-import contactsRouter from "./routes/contactsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import express from "express";
 import cors from "cors";
@@ -14,13 +13,16 @@ import FileUploadErrorHandler from "./middlewares/multerErrorHandler.js";
 
 const app = express();
 
-const publicDir = path.resolve("public");
-app.use(express.static(publicDir));
+// For static folders if will need it
+// const publicDir = path.resolve("public");
+// app.use(express.static(publicDir));
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/contacts", contactsRouter);
-app.use("/api/auth", authRouter);
+
+app.use("/", (req, res) => {
+  res.send("Requested root path");
+});
 
 app.use(notFoundHandler);
 app.use(FileUploadErrorHandler);

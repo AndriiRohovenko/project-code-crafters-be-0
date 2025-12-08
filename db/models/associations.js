@@ -1,13 +1,15 @@
-import User from "./Users.js";
-import Contact from "./Contacts.js";
+// example
 
-User.hasMany(Contact, {
-  foreignKey: "owner",
-  as: "contacts",
-  onDelete: "CASCADE",
-});
+// import User from "./Users.js";
+// import Contact from "./Contacts.js";
 
-Contact.belongsTo(User, {
-  foreignKey: "owner",
-  as: "user",
-});
+// User.hasMany(Contact, {
+//   foreignKey: "owner",
+//   as: "contacts",
+//   onDelete: "CASCADE",
+// });
+
+// Contact.belongsTo(User, {
+//   foreignKey: "owner",
+//   as: "user",
+// });

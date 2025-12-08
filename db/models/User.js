@@ -23,11 +23,6 @@ const User = sequelize.define("user", {
       is: emailRegExp,
     },
   },
-  subscription: {
-    type: DataTypes.ENUM,
-    values: ["starter", "pro", "business"],
-    defaultValue: "starter",
-  },
   token: {
     type: DataTypes.STRING,
     defaultValue: null,
@@ -35,13 +30,6 @@ const User = sequelize.define("user", {
   avatarURL: {
     type: DataTypes.STRING,
     allowNull: true,
-  },
-  verified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  verificationToken: {
-    type: DataTypes.STRING,
   },
 });
 
