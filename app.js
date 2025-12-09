@@ -10,7 +10,7 @@ import notFoundHandler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import FileUploadErrorHandler from "./middlewares/multerErrorHandler.js";
 
-import testimonialRouter from "./routes/testimonialRouter.js";
+import testimonialRouter from "./routes/TestimonialRouter.js";
 import areaRouter from "./routes/AreaRouter.js";
 
 const app = express();
