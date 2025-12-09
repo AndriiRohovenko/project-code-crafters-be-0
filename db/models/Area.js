@@ -3,7 +3,8 @@ import sequelize from '../sequelize.js';
 
 const Area = sequelize.define('area', {
   name: {
-    type: DataTypes.STRING, allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   timestamps: false
