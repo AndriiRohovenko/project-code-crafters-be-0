@@ -9,6 +9,7 @@ import syncDB from "./db/sync.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import FileUploadErrorHandler from "./middlewares/multerErrorHandler.js";
+import areaRouter from "./routes/AreaRouter.js";
 
 const app = express();
 
@@ -18,6 +19,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/areas", areaRouter);
 
 app.use("/", (req, res) => {
   res.send("Requested root path");
