@@ -1,6 +1,5 @@
 import sequelize from "./sequelize.js";
 import "./models/associations.js";
-import Area from "./models/Area.js";
 
 export default async function syncDB() {
   try {
