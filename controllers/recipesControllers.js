@@ -1,5 +1,7 @@
-import * as RecipesService from "../services/recipesServices.js";
+import * as RecipesService from "../schemas/services/recipesServices.js";
 import RecipeDTO from "../dtos/RecipeDTO.js";
+import { createRecipeSchema } from "../schemas/recipeSchemas.js";
+import HttpError from "../helpers/HttpError.js";
 
 /**
  * Search recipes by category, ingredient, and area with pagination
@@ -62,6 +64,36 @@ export const getPopularRecipes = async (req, res, next) => {
         const recipesDTOs = recipes.map(recipe => new RecipeDTO(recipe));
 
         res.json(recipesDTOs);
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * Create a new recipe (private endpoint)
+ */
+export const createRecipe = async (req, res, next) => {
+    try {
+        // Validate request body
+        const { error, value } = createRecipeSchema.validate(req.body, { abortEarly: false });
+
+        if (error) {
+            const errorMessage = error.details.map(detail => detail.message).join(", ");
+            throw HttpError(400, errorMessage);
+        }
+
+        // Get user ID from authenticated request
+        const userId = req.user_id;
+
+        // Create recipe
+        const recipe = await RecipesService.createRecipe(value, userId);
+
+        const recipeDTO = new RecipeDTO(recipe);
+
+        res.status(201).json({
+            status: "success",
+            data: { recipe: recipeDTO }
+        });
     } catch (error) {
         next(error);
     }

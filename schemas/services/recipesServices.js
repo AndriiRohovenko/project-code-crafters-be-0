@@ -1,5 +1,5 @@
-import { Recipe, Ingredient, Category, Area } from "../db/models/associations.js";
-import sequelize from "../db/sequelize.js";
+import { Recipe, Ingredient, Category, Area, RecipeIngredient } from "../../db/models/associations.js";
+import sequelize from "../../db/sequelize.js";
 
 /**
  * Search recipes by category, ingredient, and area with pagination
@@ -141,4 +141,49 @@ export const getPopularRecipes = async (limit = 4) => {
     });
 
     return recipes;
+};
+
+/**
+ * Create a new recipe
+ * @param {Object} recipeData - Recipe data
+ * @param {number} userId - User ID who creates the recipe
+ * @returns {Promise<Object>}
+ */
+export const createRecipe = async (recipeData, userId) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+        const { title, categoryId, areaId, instructions, description, thumb, time, ingredients } = recipeData;
+
+        // Create the recipe
+        const recipe = await Recipe.create({
+            title,
+            categoryId,
+            areaId,
+            instructions,
+            description,
+            thumb,
+            time,
+            userId
+        }, { transaction });
+
+        // Add ingredients if provided
+        if (ingredients && ingredients.length > 0) {
+            const recipeIngredients = ingredients.map(ingredient => ({
+                recipeId: recipe.id,
+                ingredientId: ingredient.ingredientId,
+                measure: ingredient.measure
+            }));
+
+            await RecipeIngredient.bulkCreate(recipeIngredients, { transaction });
+        }
+
+        await transaction.commit();
+
+        // Fetch the complete recipe with associations
+        return await getRecipeById(recipe.id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
 };
