@@ -1,5 +1,6 @@
 import * as usersServices from "../services/usersServices.js";
 import HttpError from "../helpers/HttpError.js";
+import UserDTO from "../dtos/UserDTO.js";
 
 /**
  * GET /api/users
@@ -17,13 +18,10 @@ export const getAllUsers = async (req, res, next) => {
     const result = await usersServices.getAllUsers({
       page: parseInt(page),
       limit: parseInt(limit),
-      search: search.trim()
+      search: search.trim(),
     });
-
-    res.json({
-      status: "success",
-      data: result
-    });
+    const userDTOs = result.users.map((user) => new UserDTO(user));
+    res.json({ ...result, users: userDTOs });
   } catch (error) {
     next(error);
   }
@@ -43,10 +41,22 @@ export const getUserById = async (req, res, next) => {
       throw HttpError(404, "User not found");
     }
 
-    res.json({
-      status: "success",
-      data: { user }
-    });
+    res.json(new UserDTO(user));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const user = await usersServices.getUserById(userId);
+
+    if (!user) {
+      throw HttpError(404, "User not found");
+    }
+
+    res.json(new UserDTO(user));
   } catch (error) {
     next(error);
   }
