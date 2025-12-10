@@ -1,20 +1,12 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize.js';
 
-const Favorite = sequelize.define('favorite', {
+const RecipeIngredient = sequelize.define('recipe_ingredient', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'users',
-      key: 'id'
-    }
   },
   recipeId: {
     type: DataTypes.INTEGER,
@@ -23,10 +15,22 @@ const Favorite = sequelize.define('favorite', {
       model: 'recipes',
       key: 'id'
     }
+  },
+  ingredientId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'ingredients',
+      key: 'id'
+    }
+  },
+  measure: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
-  tableName: 'favorites',
+  tableName: 'recipe_ingredients',
   timestamps: true
 });
 
-export default Favorite;
+export default RecipeIngredient;

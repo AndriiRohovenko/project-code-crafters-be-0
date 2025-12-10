@@ -8,7 +8,7 @@ const User = sequelize.define("user", {
     autoIncrement: true,
     primaryKey: true,
   },
-  password: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -23,14 +23,21 @@ const User = sequelize.define("user", {
       is: emailRegExp,
     },
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   token: {
     type: DataTypes.STRING,
     defaultValue: null,
   },
-  avatarURL: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
+}, {
+  tableName: 'users',
+  timestamps: true,
 });
 
 export default User;
