@@ -10,4 +10,7 @@ usersRouter.get("/", usersControllers.getAllUsers);
 // GET /api/users/:id - отримати користувача по ID
 usersRouter.get("/:id", authenticate, usersControllers.getUserById);
 
+// GET /api/users/current - отримати поточного користувача
+usersRouter.get("/current", authenticate, usersControllers.getCurrentUser);
+
 export default usersRouter;
