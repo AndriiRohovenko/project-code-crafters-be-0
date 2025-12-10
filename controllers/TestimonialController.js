@@ -13,6 +13,6 @@ export const getAll = async (req, res, next) => {
     });
     res.json(result);
   } catch (error) {
-    next(HttpError(500));
+    next(error);
   }
 }
