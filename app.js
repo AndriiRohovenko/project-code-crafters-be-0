@@ -13,8 +13,10 @@ import FileUploadErrorHandler from "./middlewares/multerErrorHandler.js";
 import testimonialRouter from "./routes/TestimonialRouter.js";
 import areaRouter from "./routes/AreaRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+
 import categoriesRouter from "./routes/CategoriesRouter.js";
 import ingredientsRouter from "./routes/ingredientsRouter.js";
+import authRouter from "./routes/authRouter.js";
 
 const app = express();
 
@@ -30,6 +32,7 @@ app.use("/api/areas", areaRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/ingredients", ingredientsRouter);
+app.use("/api/auth", authRouter);
 
 app.use("/", (req, res) => {
   res.send("Requested root path");
