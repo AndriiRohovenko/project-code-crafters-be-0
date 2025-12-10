@@ -5,7 +5,7 @@ export const getAll = async (req, res, next) => {
   try {
     const testimonials = await getTestimonials();
     const result = testimonials.map(testimonial => {
-      const { owner, ownerId, ...rest } = testimonial.toJSON();
+      const { owner, ...rest } = testimonial.toJSON();
       return {
         ...rest,
         ownerName: owner?.name || "Unknown"
