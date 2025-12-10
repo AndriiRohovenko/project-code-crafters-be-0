@@ -1,5 +1,5 @@
 import * as ingredientsService from "../services/ingredientsServices.js";
-import IngredientDTO from "../dtos/ingredientDTO.js";
+import IngredientDTO from "../dtos/IngredientDTO.js";
 
 export const getAll = async (req, res, next) => {
     try {
