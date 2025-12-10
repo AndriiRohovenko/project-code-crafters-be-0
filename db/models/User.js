@@ -23,6 +23,16 @@ const User = sequelize.define("user", {
       is: emailRegExp,
     },
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: {
+        args: [2, 50],
+        msg: "Name must be between 2 and 50 characters",
+      },
+    },
+  },
   token: {
     type: DataTypes.STRING,
     defaultValue: null,
