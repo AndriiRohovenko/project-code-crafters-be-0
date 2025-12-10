@@ -10,10 +10,12 @@ const Area = sequelize.define('area', {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   }
 }, {
-  timestamps: false
+  tableName: 'areas',
+  timestamps: true
 })
 
 export default Area;

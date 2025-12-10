@@ -8,16 +8,21 @@ const Testimonial = sequelize.define('testimonial', {
     primaryKey: true,
     allowNull: false
   },
-  owner: {
+  ownerId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id'
+    }
   },
   testimonial: {
     type: DataTypes.TEXT,
     allowNull: false
   }
 }, {
-  timestamps: false
-})
+  tableName: 'testimonials',
+  timestamps: true
+});
 
 export default Testimonial;
