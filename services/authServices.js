@@ -1,12 +1,39 @@
+import bcrypt from "bcryptjs";
+import HttpError from "../helpers/HttpError.js";
 import User from "../db/models/User.js";
 
 /**
- * Знайти користувача по різних критеріях
- * @param {Object} filter - Фільтр для пошуку (id, email, тощо)
- * @returns {Object|null} - Користувач або null
+ * Find a user by the provided filter criteria.
+ *
+ * @param {Object} filter - Search criteria (e.g., { id }, { email }, etc.).
+ * @param {Object} [options={}] - Additional Sequelize query options
+ *                                (e.g., attributes, include, order).
+ * @returns {Promise<Object|null>} - The found user instance or null if not found.
  */
-export const findUser = async (filter) => {
-  const user = await User.findOne({ where: filter });
+export const findUserService = async (filter, options = {}) => {
+  const user = await User.findOne({ where: filter, ...options });
+  return user;
+};
+
+/**
+ * Create a new user
+ * @param {Object} userData - User registration data
+ * @returns {Object} - Created user
+ */
+export const createUserService = async (userData) => {
+  const existingUser = await findUserService({ email: userData.email });
+
+  if (existingUser) {
+    throw HttpError(409, "Email already in use");
+  }
+
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+  const user = await User.create({
+    ...userData,
+    password: hashedPassword,
+  });
+
   return user;
 };
 
@@ -29,7 +56,7 @@ export const createUser = async (userData) => {
 export const updateUser = async (id, updateData) => {
   const user = await User.findByPk(id);
   if (!user) return null;
-  
+
   await user.update(updateData);
   return user;
 };
