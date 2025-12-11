@@ -9,10 +9,10 @@ module.exports = {
       allowNull: true,
       references: {
         model: 'categories',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'SET NULL',
     });
 
     await queryInterface.addColumn('recipes', 'areaId', {
@@ -20,10 +20,10 @@ module.exports = {
       allowNull: true,
       references: {
         model: 'areas',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'SET NULL'
+      onDelete: 'SET NULL',
     });
 
     // 2. Мігруємо дані: знаходимо відповідні ID по назвам
@@ -60,5 +60,5 @@ module.exports = {
     // Видаляємо колонки
     await queryInterface.removeColumn('recipes', 'categoryId');
     await queryInterface.removeColumn('recipes', 'areaId');
-  }
+  },
 };

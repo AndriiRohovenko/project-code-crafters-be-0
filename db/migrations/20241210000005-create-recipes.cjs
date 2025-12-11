@@ -8,56 +8,56 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       category: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       area: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       instructions: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: true
+        allowNull: true,
       },
       thumb: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
       },
       time: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: true,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
           model: 'users',
-          key: 'id'
+          key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      }
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
     });
 
     await queryInterface.addIndex('recipes', ['title']);
@@ -68,5 +68,5 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('recipes');
-  }
+  },
 };

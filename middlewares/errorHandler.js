@@ -1,4 +1,4 @@
-import { ValidationError, UniqueConstraintError } from "sequelize";
+import { ValidationError, UniqueConstraintError } from 'sequelize';
 
 const errorHandler = (err, req, res, next) => {
   if (err instanceof ValidationError) {
@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
     err.status = 409;
   }
   console.log(err);
-  const { status = 500, message = "Server error" } = err;
+  const { status = 500, message = 'Server error' } = err;
   res.status(status).json({ message });
 };
 

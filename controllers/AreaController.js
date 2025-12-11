@@ -1,5 +1,5 @@
-import { getAreas } from "../services/AreaService.js";
-import HttpError from "../helpers/HttpError.js";
+import { getAreas } from '../services/AreaService.js';
+import HttpError from '../helpers/HttpError.js';
 
 export const getAll = async (req, res, next) => {
   try {
@@ -8,4 +8,4 @@ export const getAll = async (req, res, next) => {
   } catch (error) {
     next(HttpError(500));
   }
-}
+};

@@ -1,9 +1,10 @@
-import UserDTO from "../dtos/UserDTO.js";
-import { normalizeEmail } from "../helpers/normalizeEmail.js";
+import UserDTO from '../dtos/UserDTO.js';
+import { normalizeEmail } from '../helpers/normalizeEmail.js';
 import {
   createUserService,
   loginUserService,
-} from "../services/authServices.js";
+  logoutUserService,
+} from '../services/authServices.js';
 
 /**
  * Create a new user.
@@ -45,7 +46,6 @@ export const createUserController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const { email } = req.body;
   const normalizedEmail = normalizeEmail(email);
-  console.log("🚀 ~ normalizedEmail:", normalizedEmail);
 
   const { user, token } = await loginUserService({
     ...req.body,
@@ -55,4 +55,20 @@ export const loginUserController = async (req, res) => {
   const userDto = UserDTO.fromModel(user);
 
   res.json({ user: userDto, token });
+};
+
+/**
+ * Logout user
+ *
+ * Clears the authentication token of the currently authenticated user.
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} req.user - Authenticated user instance injected by middleware
+ * @param {Object} res - Express response object
+ * @returns {void} - Responds with HTTP 204 No Content on success
+ */
+export const logoutUserController = async (req, res) => {
+  await logoutUserService(req.user);
+
+  res.status(204).send();
 };
