@@ -1,4 +1,4 @@
-import * as RecipesService from "../schemas/services/recipesServices.js";
+import * as RecipesService from "../services/recipesServices.js";
 import RecipeDTO from "../dtos/RecipeDTO.js";
 import { createRecipeSchema } from "../schemas/recipeSchemas.js";
 import HttpError from "../helpers/HttpError.js";

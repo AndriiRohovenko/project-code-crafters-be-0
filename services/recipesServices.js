@@ -1,5 +1,5 @@
-import { Recipe, Ingredient, Category, Area, RecipeIngredient } from "../../db/models/associations.js";
-import sequelize from "../../db/sequelize.js";
+import { Recipe, Ingredient, Category, Area, RecipeIngredient } from "../db/models/associations.js";
+import sequelize from "../db/sequelize.js";
 
 /**
  * Search recipes by category, ingredient, and area with pagination
