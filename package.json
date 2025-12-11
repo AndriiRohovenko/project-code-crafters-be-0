@@ -11,7 +11,9 @@
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
     "db:seed:all": "sequelize-cli db:seed:all",
-    "db:seed:undo:all": "sequelize-cli db:seed:undo:all"
+    "db:seed:undo:all": "sequelize-cli db:seed:undo:all",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -39,8 +41,14 @@
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "dotenv": "^17.2.3",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
     "nodemon": "^3.1.10",
+    "prettier": "^3.7.4",
     "sequelize-cli": "^6.6.3"
   }
 }
