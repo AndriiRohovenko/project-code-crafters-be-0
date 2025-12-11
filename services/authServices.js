@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import HttpError from "../helpers/HttpError.js";
 import User from "../db/models/User.js";
+import { createToken } from "../helpers/jwt.js";
 
 /**
  * Find a user by the provided filter criteria.
@@ -35,6 +36,40 @@ export const createUserService = async (userData) => {
   });
 
   return user;
+};
+
+/**
+ * Login user
+ * @param {Object} credentials - User login data
+ * @param {string} credentials.email - User email
+ * @param {string} credentials.password - User password
+ * @returns {Object} - Auth data with user and token
+ */
+export const loginUserService = async ({ email, password }) => {
+  const user = await findUserService({ email });
+
+  if (!user) {
+    throw HttpError(401, "Email or password is wrong");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw HttpError(401, "Email or password is wrong");
+  }
+
+  const payload = {
+    id: user.id,
+  };
+
+  const token = createToken(payload);
+
+  await user.update({ token });
+
+  return {
+    user,
+    token,
+  };
 };
 
 /**
