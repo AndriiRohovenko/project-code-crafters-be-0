@@ -1,51 +1,95 @@
 /**
+ * @typedef {Object} RecipeIngredient
+ * @property {number} id
+ * @property {string} name
+ * @property {string|null} img
+ * @property {string|null} measure
+ */
+
+/**
  * Data Transfer Object for Recipe response.
  */
 class RecipeDTO {
+  /**
+   * @param {import('../db/models/Recipe.js').default} recipe - The recipe model instance.
+   */
+  constructor(recipe) {
+    const recipeData = recipe.toJSON ? recipe.toJSON() : recipe;
+
     /**
-     * @param {Object} recipe - The recipe model instance or object.
+     * @type {number}
      */
-    constructor(recipe) {
-        const recipeData = recipe.toJSON ? recipe.toJSON() : recipe;
+    this.id = recipeData.id;
 
-        this.id = recipeData.id;
-        this.title = recipeData.title;
-        this.category = recipeData.category;
-        this.area = recipeData.area;
-        this.instructions = recipeData.instructions;
-        this.description = recipeData.description;
-        this.thumb = recipeData.thumb;
-        this.time = recipeData.time;
+    /**
+     * @type {string}
+     */
+    this.title = recipeData.title;
 
-        // Include related data if available
-        if (recipeData.categoryInfo) {
-            this.categoryInfo = {
-                id: recipeData.categoryInfo.id,
-                name: recipeData.categoryInfo.name
-            };
-        }
+    /**
+     * @type {string}
+     */
+    this.category = recipeData.category;
 
-        if (recipeData.areaInfo) {
-            this.areaInfo = {
-                id: recipeData.areaInfo.id,
-                name: recipeData.areaInfo.name
-            };
-        }
+    /**
+     * @type {string}
+     */
+    this.area = recipeData.area;
 
-        if (recipeData.ingredients) {
-            this.ingredients = recipeData.ingredients.map(ingredient => ({
-                id: ingredient.id,
-                name: ingredient.name,
-                img: ingredient.img,
-                measure: ingredient.recipe_ingredient?.measure || ingredient.RecipeIngredient?.measure || null
-            }));
-        }
+    /**
+     * @type {string}
+     */
+    this.instructions = recipeData.instructions;
 
-        // Include favorites count if available (for popular recipes)
-        if (recipeData.favoritesCount !== undefined) {
-            this.favoritesCount = parseInt(recipeData.favoritesCount) || 0;
-        }
+    /**
+     * @type {string}
+     */
+    this.description = recipeData.description;
+
+    /**
+     * @type {string}
+     */
+    this.thumb = recipeData.thumb;
+
+    /**
+     * @type {number}
+     */
+    this.time = recipeData.time;
+
+    /**
+     * @type {number}
+     */
+    this.categoryId = recipeData.categoryId;
+
+    /**
+     * @type {number}
+     */
+    this.areaId = recipeData.areaId;
+
+    /**
+     * @type {RecipeIngredient[]}
+     */
+    if (recipeData.ingredients) {
+      this.ingredients = recipeData.ingredients.map((ingredient) => ({
+        id: ingredient.id,
+        name: ingredient.name,
+        img: ingredient.img,
+        measure:
+          ingredient.recipe_ingredient?.measure ||
+          ingredient.RecipeIngredient?.measure ||
+          null,
+      }));
+    } else {
+      this.ingredients = [];
     }
+
+    /**
+     * @type {number}
+     */
+    this.favoritesCount = recipeData.favoritesCount
+      ? parseInt(recipeData.favoritesCount)
+      : 0;
+  }
 }
 
 export default RecipeDTO;
