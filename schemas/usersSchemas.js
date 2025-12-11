@@ -8,9 +8,9 @@ export const getUsersQuerySchema = Joi.object({
 });
 
 export const followUserSchema = Joi.object({
-  followerId: Joi.number().integer().min(1).required()
+  followingId: Joi.number().integer().min(1).required()
 })
 
 export const unfollowUserSchema = Joi.object({
-  followerId: Joi.number().integer().min(1).required()
+  followingId: Joi.number().integer().min(1).required()
 })

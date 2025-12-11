@@ -10,7 +10,7 @@ export const getFollowers = async (userId) => {
     where: { userId },
     include: {
       model: User,
-      as: "follower",
+      as: "followerUser",
       attributes: ["id", "name", "email", "avatar"]
     }
   });
@@ -24,7 +24,7 @@ export const getFollowing = async (followerId) => {
     where: { followerId },
     include: {
       model: User,
-      as: "user",
+      as: "followedUser",
       attributes: ["id", "name", "email", "avatar"]
     }
   });
@@ -33,23 +33,23 @@ export const getFollowing = async (followerId) => {
 /**
  * Підписатись
  */
-export const followUser = async ({ userId, followerId }) => {
+export const followUser = async ({ userId, followingId }) => {
   // Перевірка чи вже підписаний
   const existing = await Follower.findOne({
-    where: { userId, followerId }
+    where: { userId: followingId, followerId: userId }
   });
 
   if (existing) throw HttpError(409, "Already following");
 
-  return await Follower.create({ userId, followerId });
+  return await Follower.create({ followerId: userId, userId: followingId });
 };
 
 /**
  * Відписатись
  */
-export const unfollowUser = async ({ userId, followerId }) => {
+export const unfollowUser = async ({ userId, followingId }) => {
   const relation = await Follower.findOne({
-    where: { userId, followerId }
+    where: { userId: followingId, followerId: userId }
   });
 
   if (!relation) throw HttpError(404, "You are not following this user");

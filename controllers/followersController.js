@@ -1,5 +1,6 @@
 import * as followersServices from "../services/followersServices.js";
 import HttpError from "../helpers/HttpError.js";
+import UserDTO from "../dtos/UserDTO.js";
 
 /**
  * GET /api/users/:id/followers
@@ -9,7 +10,8 @@ export const getFollowers = async (req, res, next) => {
   try {
     const { id } = req.params;
     const followers = await followersServices.getFollowers(id);
-    res.json(followers);
+    const formatted = followers.map(f => new UserDTO(f.followerUser));
+    res.json(formatted);
   } catch (error) {
     next(error);
   }
@@ -21,9 +23,10 @@ export const getFollowers = async (req, res, next) => {
  */
 export const getFollowing = async (req, res, next) => {
   try {
-    const userId = req.user_id;
+     const userId = req.user_id;
     const following = await followersServices.getFollowing(userId);
-    res.json(following);
+    const formatted = following.map(f => new UserDTO(f.followedUser));
+    res.json(formatted);
   } catch (error) {
     next(error);
   }
@@ -36,13 +39,13 @@ export const getFollowing = async (req, res, next) => {
 export const followUser = async (req, res, next) => {
   try {
     const userId = req.user_id;
-    const { followerId } = req.body;
+    const { followingId } = req.body;
 
-    if (followerId == userId) {
+    if (followingId == userId) {
       throw HttpError(400, "You cannot follow yourself");
     }
 
-    await followersServices.followUser({ userId, followerId });
+    await followersServices.followUser({ userId, followingId });
 
     res.json({ message: "Followed successfully" });
   } catch (error) {
@@ -57,9 +60,9 @@ export const followUser = async (req, res, next) => {
 export const unfollowUser = async (req, res, next) => {
   try {
     const userId = req.user_id;
-    const { followerId } = req.body;
+    const { followingId } = req.body;
 
-    await followersServices.unfollowUser({ userId, followerId });
+    await followersServices.unfollowUser({ userId, followingId });
 
     res.json({ message: "Unfollowed successfully" });
   } catch (error) {
