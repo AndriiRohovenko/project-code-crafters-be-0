@@ -19,6 +19,7 @@ import categoriesRouter from './routes/CategoriesRouter.js';
 import ingredientsRouter from './routes/ingredientsRouter.js';
 import recipesRouter from './routes/recipesRouter.js';
 import authRouter from './routes/authRouter.js';
+import favoritesRouter from './routes/favoritesRouter.js';
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/ingredients', ingredientsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
+app.use('/api/favorites', favoritesRouter);
 
 app.use('/', (req, res) => {
   res.send('Requested root path');
