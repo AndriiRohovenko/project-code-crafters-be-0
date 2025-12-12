@@ -101,14 +101,18 @@ Recipe.belongsToMany(User, {
   as: 'favoritedBy',
 });
 
-export {
-  User,
-  Recipe,
-  Ingredient,
-  RecipeIngredient,
-  Testimonial,
-  Follower,
-  Favorite,
-  Category,
-  Area,
-};
+// Follower -> User (follower user)
+Follower.belongsTo(User, {
+  foreignKey: "followerId",
+  as: "followerUser"
+});
+
+// Follower -> User (user being followed)
+Follower.belongsTo(User, {
+  foreignKey: "userId",
+  as: "followedUser"
+});
+
+
+export { User, Recipe, Ingredient, RecipeIngredient, Testimonial, Follower, Favorite, Category, Area };
+
