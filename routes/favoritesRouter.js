@@ -1,10 +1,14 @@
 import { Router } from 'express';
-// import validateBody from '../helpers/validateBody.js';
 import authenticate from '../middlewares/authenticate.js';
-import { getFavoriteRecipesController } from '../controllers/favoritesControllers.js';
+import {
+  addFavoriteRecipeController,
+  getFavoriteRecipesController,
+} from '../controllers/favoritesControllers.js';
 
 const favoritesRouter = Router();
 
 favoritesRouter.get('/', authenticate, getFavoriteRecipesController);
+
+favoritesRouter.post('/:recipeId', authenticate, addFavoriteRecipeController);
 
 export default favoritesRouter;
