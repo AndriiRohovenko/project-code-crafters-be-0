@@ -141,7 +141,11 @@ usersRouter.get('/current', authenticate, usersControllers.getCurrentUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-usersRouter.get("/:id/followers", authenticate, followersController.getFollowers);
+usersRouter.get(
+  '/:id/followers',
+  authenticate,
+  followersController.getFollowers
+);
 
 /**
  * @swagger
@@ -167,7 +171,11 @@ usersRouter.get("/:id/followers", authenticate, followersController.getFollowers
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-usersRouter.get("/current/following", authenticate, followersController.getFollowing);
+usersRouter.get(
+  '/current/following',
+  authenticate,
+  followersController.getFollowing
+);
 
 /**
  * @swagger
@@ -205,7 +213,12 @@ usersRouter.get("/current/following", authenticate, followersController.getFollo
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-usersRouter.post("/follow", authenticate, validateBody(followUserSchema), followersController.followUser);
+usersRouter.post(
+  '/follow',
+  authenticate,
+  validateBody(followUserSchema),
+  followersController.followUser
+);
 
 /**
  * @swagger
@@ -237,6 +250,11 @@ usersRouter.post("/follow", authenticate, validateBody(followUserSchema), follow
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-usersRouter.delete("/unfollow", authenticate, validateBody(unfollowUserSchema), followersController.unfollowUser);
+usersRouter.delete(
+  '/unfollow',
+  authenticate,
+  validateBody(unfollowUserSchema),
+  followersController.unfollowUser
+);
 
 export default usersRouter;
