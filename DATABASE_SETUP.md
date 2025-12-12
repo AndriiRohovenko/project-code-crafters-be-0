@@ -68,6 +68,7 @@ npm run db:seed:undo:all
 ```
 
 **Що включають seeders:**
+
 - 27 регіонів кухні (Ukrainian, Italian, British, Japanese, тощо)
 - 15 категорій (Dessert, Chicken, Beef, Seafood, тощо)
 - 3 тестових користувачі (пароль: `password123`)
@@ -163,8 +164,8 @@ const recipe = await Recipe.findOne({
   include: [
     { model: Category, as: 'categoryInfo' },
     { model: Area, as: 'areaInfo' },
-    { model: User, as: 'owner' }
-  ]
+    { model: User, as: 'owner' },
+  ],
 });
 
 console.log(recipe.categoryInfo.name); // "Dessert"

@@ -1,6 +1,6 @@
-import * as usersServices from "../services/usersServices.js";
-import HttpError from "../helpers/HttpError.js";
-import UserDTO from "../dtos/UserDTO.js";
+import * as usersServices from '../services/usersServices.js';
+import HttpError from '../helpers/HttpError.js';
+import UserDTO from '../dtos/UserDTO.js';
 
 /**
  * GET /api/users
@@ -8,11 +8,11 @@ import UserDTO from "../dtos/UserDTO.js";
  */
 export const getAllUsers = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
+    const { page = 1, limit = 10, search = '' } = req.query;
 
     // Валідація параметрів
     if (page < 1 || limit < 1 || limit > 100) {
-      throw HttpError(400, "Invalid pagination parameters");
+      throw HttpError(400, 'Invalid pagination parameters');
     }
 
     const result = await usersServices.getAllUsers({
@@ -38,7 +38,7 @@ export const getUserById = async (req, res, next) => {
     const user = await usersServices.getUserById(id);
 
     if (!user) {
-      throw HttpError(404, "User not found");
+      throw HttpError(404, 'User not found');
     }
 
     res.json(new UserDTO(user));
@@ -53,7 +53,7 @@ export const getCurrentUser = async (req, res, next) => {
     const user = await usersServices.getUserById(userId);
 
     if (!user) {
-      throw HttpError(404, "User not found");
+      throw HttpError(404, 'User not found');
     }
 
     res.json(new UserDTO(user));

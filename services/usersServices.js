@@ -1,5 +1,5 @@
-import User from "../db/models/User.js";
-import { Op } from "sequelize";
+import User from '../db/models/User.js';
+import { Op } from 'sequelize';
 
 /**
  * Отримати всіх користувачів з пагінацією та фільтрами
@@ -9,7 +9,7 @@ import { Op } from "sequelize";
  * @param {string} options.search - Пошук по імені або email
  * @returns {Object} - Список користувачів та метадані пагінації
  */
-export const getAllUsers = async ({ page = 1, limit = 10, search = "" }) => {
+export const getAllUsers = async ({ page = 1, limit = 10, search = '' }) => {
   const offset = (page - 1) * limit;
 
   // Умови пошуку
@@ -17,18 +17,18 @@ export const getAllUsers = async ({ page = 1, limit = 10, search = "" }) => {
     ? {
         [Op.or]: [
           { name: { [Op.iLike]: `%${search}%` } },
-          { email: { [Op.iLike]: `%${search}%` } }
-        ]
+          { email: { [Op.iLike]: `%${search}%` } },
+        ],
       }
     : {};
 
   // Запит до БД
   const { count, rows } = await User.findAndCountAll({
     where: whereClause,
-    attributes: { exclude: ["password", "token"] }, // Не повертаємо паролі
+    attributes: { exclude: ['password', 'token'] }, // Не повертаємо паролі
     limit: parseInt(limit),
     offset: parseInt(offset),
-    order: [["createdAt", "DESC"]]
+    order: [['createdAt', 'DESC']],
   });
 
   // Метадані пагінації
@@ -42,8 +42,8 @@ export const getAllUsers = async ({ page = 1, limit = 10, search = "" }) => {
       totalItems: count,
       itemsPerPage: parseInt(limit),
       hasNextPage: page < totalPages,
-      hasPrevPage: page > 1
-    }
+      hasPrevPage: page > 1,
+    },
   };
 };
 
@@ -54,7 +54,7 @@ export const getAllUsers = async ({ page = 1, limit = 10, search = "" }) => {
  */
 export const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    attributes: { exclude: ["password", "token"] }
+    attributes: { exclude: ['password', 'token'] },
   });
 
   return user;

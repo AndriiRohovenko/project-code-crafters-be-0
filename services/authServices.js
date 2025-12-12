@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs";
-import HttpError from "../helpers/HttpError.js";
-import User from "../db/models/User.js";
-import { createToken } from "../helpers/jwt.js";
+import bcrypt from 'bcryptjs';
+import HttpError from '../helpers/HttpError.js';
+import User from '../db/models/User.js';
+import { createToken } from '../helpers/jwt.js';
 
 /**
  * Find a user by the provided filter criteria.
@@ -18,6 +18,7 @@ export const findUserService = async (filter, options = {}) => {
 
 /**
  * Create a new user
+ *
  * @param {Object} userData - User registration data
  * @returns {Object} - Created user
  */
@@ -25,7 +26,7 @@ export const createUserService = async (userData) => {
   const existingUser = await findUserService({ email: userData.email });
 
   if (existingUser) {
-    throw HttpError(409, "Email already in use");
+    throw HttpError(409, 'Email already in use');
   }
 
   const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -40,6 +41,7 @@ export const createUserService = async (userData) => {
 
 /**
  * Login user
+ *
  * @param {Object} credentials - User login data
  * @param {string} credentials.email - User email
  * @param {string} credentials.password - User password
@@ -49,13 +51,13 @@ export const loginUserService = async ({ email, password }) => {
   const user = await findUserService({ email });
 
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(401, 'Email or password is wrong');
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(401, 'Email or password is wrong');
   }
 
   const payload = {
@@ -70,6 +72,18 @@ export const loginUserService = async ({ email, password }) => {
     user,
     token,
   };
+};
+
+/**
+ * Logout user by clearing their authentication token.
+ *
+ * @param {Object} user - Sequelize user instance
+ * @returns {Promise<boolean>} - Returns true when logout is completed
+ */
+export const logoutUserService = async (user) => {
+  await user.update({ token: null });
+
+  return true;
 };
 
 /**

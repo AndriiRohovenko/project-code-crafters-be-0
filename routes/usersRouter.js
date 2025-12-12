@@ -8,13 +8,13 @@ import {followUserSchema, unfollowUserSchema} from "../schemas/usersSchemas.js";
 const usersRouter = express.Router();
 
 // GET /api/users - отримати всіх користувачів (тимчасово без авторизації)
-usersRouter.get("/", usersControllers.getAllUsers);
+usersRouter.get('/', usersControllers.getAllUsers);
 
 // GET /api/users/:id - отримати користувача по ID
-usersRouter.get("/:id", authenticate, usersControllers.getUserById);
+usersRouter.get('/:id', authenticate, usersControllers.getUserById);
 
 // GET /api/users/current - отримати поточного користувача
-usersRouter.get("/current", authenticate, usersControllers.getCurrentUser);
+usersRouter.get('/current', authenticate, usersControllers.getCurrentUser);
 
 // GET /api/users/:id/followers - отримати список підписників користувача
 usersRouter.get("/:id/followers", authenticate, followersController.getFollowers);

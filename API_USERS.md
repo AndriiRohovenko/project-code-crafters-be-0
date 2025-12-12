@@ -9,17 +9,20 @@
 **Авторизація:** Потрібна (Bearer token)
 
 **Query параметри:**
+
 - `page` (number, optional) - Номер сторінки (за замовчуванням: 1)
 - `limit` (number, optional) - Кількість елементів на сторінку (1-100, за замовчуванням: 10)
 - `search` (string, optional) - Пошук по імені або email користувача
 
 **Приклад запиту:**
+
 ```bash
 GET /api/users?page=1&limit=10&search=john
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
 **Успішна відповідь (200):**
+
 ```json
 {
   "status": "success",
@@ -47,6 +50,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
 **Помилки:**
+
 - `400` - Невалідні параметри пагінації
 - `401` - Не авторизований
 
@@ -59,15 +63,18 @@ Authorization: Bearer YOUR_TOKEN_HERE
 **Авторизація:** Потрібна (Bearer token)
 
 **URL параметри:**
+
 - `id` (number, required) - ID користувача
 
 **Приклад запиту:**
+
 ```bash
 GET /api/users/1
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
 **Успішна відповідь (200):**
+
 ```json
 {
   "status": "success",
@@ -85,6 +92,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
 **Помилки:**
+
 - `401` - Не авторизований
 - `404` - Користувача не знайдено
 
@@ -112,19 +120,25 @@ curl -X GET "http://localhost:3000/api/users/1" \
 
 ```javascript
 // Отримати список користувачів
-const response = await fetch('http://localhost:3000/api/users?page=1&limit=10', {
-  headers: {
-    'Authorization': `Bearer ${token}`
+const response = await fetch(
+  'http://localhost:3000/api/users?page=1&limit=10',
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }
-});
+);
 const data = await response.json();
 
 // Пошук користувачів
-const searchResponse = await fetch('http://localhost:3000/api/users?search=john', {
-  headers: {
-    'Authorization': `Bearer ${token}`
+const searchResponse = await fetch(
+  'http://localhost:3000/api/users?search=john',
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }
-});
+);
 const searchData = await searchResponse.json();
 ```
 
@@ -136,7 +150,7 @@ import axios from 'axios';
 // Отримати список користувачів
 const { data } = await axios.get('http://localhost:3000/api/users', {
   params: { page: 1, limit: 10, search: 'john' },
-  headers: { Authorization: `Bearer ${token}` }
+  headers: { Authorization: `Bearer ${token}` },
 });
 
 console.log(data.data.users);

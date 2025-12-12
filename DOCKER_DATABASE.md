@@ -9,6 +9,7 @@
 **Mac:** Запустіть Docker Desktop з Applications
 
 **Linux:** Переконайтеся що Docker daemon запущений:
+
 ```bash
 sudo systemctl start docker
 ```
@@ -24,12 +25,14 @@ docker-compose ps
 ```
 
 Це запустить:
+
 - **PostgreSQL** на порту `5432`
 - **pgAdmin** на порту `5050` (веб-інтерфейс для управління БД)
 
 ### 2. Доступ до PostgreSQL
 
 **Параметри підключення:**
+
 ```
 Host: localhost
 Port: 5432
@@ -43,10 +46,12 @@ Password: postgres
 Відкрийте браузер: `http://localhost:5050`
 
 **Логін:**
+
 - Email: `admin@foodies.com`
 - Password: `admin`
 
 **Додати сервер в pgAdmin:**
+
 1. Клікніть "Add New Server"
 2. На вкладці "General": Name = `Foodies DB`
 3. На вкладці "Connection":
@@ -70,6 +75,7 @@ npm run db:seed:all
 ```
 
 **Тестові користувачі:**
+
 - goit@gmail.com / password123
 - user@gmail.com / password123
 - larry@gmail.com / password123
@@ -134,6 +140,7 @@ DB_PASSWORD=postgres
 **Причина:** Docker Desktop не запущений
 
 **Рішення:**
+
 1. Запустіть Docker Desktop (Windows/Mac)
 2. Зачекайте поки Docker повністю завантажиться (іконка в tray стане зеленою)
 3. Спробуйте знову:
@@ -142,6 +149,7 @@ DB_PASSWORD=postgres
    ```
 
 **Перевірка:**
+
 ```bash
 # Має показати версію
 docker ps
@@ -155,17 +163,20 @@ docker info
 Якщо у вас вже встановлений PostgreSQL локально:
 
 **Варіант 1:** Змініть порт в `docker-compose.yml`:
+
 ```yaml
 ports:
-  - "5433:5432"  # Використовуємо 5433 замість 5432
+  - '5433:5432' # Використовуємо 5433 замість 5432
 ```
 
 Тоді в `.env`:
+
 ```env
 DB_PORT=5433
 ```
 
 **Варіант 2:** Зупиніть локальний PostgreSQL:
+
 ```bash
 # Windows
 net stop postgresql-x64-16
@@ -188,6 +199,7 @@ docker-compose up -d
 ### Не можу підключитися до pgAdmin
 
 Переконайтеся що контейнер запущений:
+
 ```bash
 docker-compose ps
 ```
@@ -200,11 +212,12 @@ docker-compose ps
 
 ```yaml
 environment:
-  POSTGRES_PASSWORD: your_secure_password  # PostgreSQL пароль
-  PGADMIN_DEFAULT_PASSWORD: your_admin_password  # pgAdmin пароль
+  POSTGRES_PASSWORD: your_secure_password # PostgreSQL пароль
+  PGADMIN_DEFAULT_PASSWORD: your_admin_password # pgAdmin пароль
 ```
 
 Після зміни:
+
 ```bash
 docker-compose down -v
 docker-compose up -d
@@ -234,6 +247,7 @@ volumes:
 ```
 
 Запуск:
+
 ```bash
 docker-compose -f docker-compose.prod.yml up -d
 ```
