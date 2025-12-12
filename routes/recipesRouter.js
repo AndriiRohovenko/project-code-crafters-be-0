@@ -4,12 +4,177 @@ import { authenticate } from '../middlewares/authenticate.js';
 
 const recipesRouter = express.Router();
 
-// Public endpoints
+/**
+ * @swagger
+ * /api/recipes/search:
+ *   get:
+ *     summary: Пошук рецептів за запитом
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: Пошуковий запит
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Фільтр по категорії
+ *       - in: query
+ *         name: area
+ *         schema:
+ *           type: string
+ *         description: Фільтр по регіону кухні
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Номер сторінки
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Кількість елементів на сторінці
+ *     responses:
+ *       200:
+ *         description: Список рецептів
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ */
 recipesRouter.get('/search', RecipesController.searchRecipes);
+
+/**
+ * @swagger
+ * /api/recipes/popular:
+ *   get:
+ *     summary: Отримати популярні рецепти
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Кількість рецептів
+ *     responses:
+ *       200:
+ *         description: Список популярних рецептів
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Recipe'
+ */
 recipesRouter.get('/popular', RecipesController.getPopularRecipes);
+
+/**
+ * @swagger
+ * /api/recipes/{id}:
+ *   get:
+ *     summary: Отримати рецепт по ID
+ *     tags: [Recipes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID рецепта
+ *     responses:
+ *       200:
+ *         description: Дані рецепта
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ *       404:
+ *         description: Рецепт не знайдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 recipesRouter.get('/:id', RecipesController.getRecipeById);
 
-// Private endpoints
+/**
+ * @swagger
+ * /api/recipes:
+ *   post:
+ *     summary: Створити новий рецепт
+ *     tags: [Recipes]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - category
+ *               - instructions
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Назва рецепта
+ *               category:
+ *                 type: string
+ *                 description: Категорія рецепта
+ *               area:
+ *                 type: string
+ *                 description: Регіон кухні
+ *               instructions:
+ *                 type: string
+ *                 description: Інструкції приготування
+ *               description:
+ *                 type: string
+ *                 description: Опис рецепта
+ *               time:
+ *                 type: string
+ *                 description: Час приготування
+ *               ingredients:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                     measure:
+ *                       type: string
+ *     responses:
+ *       201:
+ *         description: Рецепт успішно створено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Recipe'
+ *       400:
+ *         description: Невалідні дані
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Не авторизовано
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 recipesRouter.post('/', authenticate, RecipesController.createRecipe);
 
 export default recipesRouter;
