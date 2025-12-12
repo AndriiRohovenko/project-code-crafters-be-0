@@ -102,3 +102,30 @@ export const addFavoriteRecipeService = async (userId, recipeId) => {
 
   return updatedRecipe;
 };
+
+/**
+ * Remove recipe from user's favorites.
+ *
+ * @param {number} userId
+ * @param {number|string} recipeId
+ * @returns {Promise<Object>} - The removed recipe model
+ */
+export const removeFavoriteRecipeService = async (userId, recipeId) => {
+  const recipe = await Recipe.findByPk(recipeId);
+
+  if (!recipe) {
+    throw HttpError(404, 'Recipe not found');
+  }
+
+  const favoriteEntry = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (!favoriteEntry) {
+    throw HttpError(400, 'Recipe is not in favorites');
+  }
+
+  await favoriteEntry.destroy();
+
+  return recipe;
+};
