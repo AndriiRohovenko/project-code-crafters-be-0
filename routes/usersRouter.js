@@ -1,9 +1,12 @@
-import express from "express";
-import * as usersControllers from "../controllers/usersControllers.js";
-import * as followersController from "../controllers/followersController.js";
-import { authenticate } from "../middlewares/authenticate.js";
-import validateBody from "../helpers/validateBody.js";
-import {followUserSchema, unfollowUserSchema} from "../schemas/usersSchemas.js";
+import express from 'express';
+import * as usersControllers from '../controllers/usersControllers.js';
+import * as followersController from '../controllers/followersController.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import validateBody from '../helpers/validateBody.js';
+import {
+  followUserSchema,
+  unfollowUserSchema,
+} from '../schemas/usersSchemas.js';
 
 const usersRouter = express.Router();
 

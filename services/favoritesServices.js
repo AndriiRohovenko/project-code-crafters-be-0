@@ -4,6 +4,7 @@ import Ingredient from '../db/models/Ingredient.js';
 import Category from '../db/models/Category.js';
 import Area from '../db/models/Area.js';
 import HttpError from '../helpers/HttpError.js';
+import Favorite from '../db/models/Favorite.js';
 
 /**
  * Get all favorite recipes for a specific user with related data.
@@ -49,4 +50,55 @@ export const getFavoriteRecipesService = async (userId) => {
   }
 
   return user.favoriteRecipes;
+};
+
+/**
+ * Add recipe to user's favorites.
+ *
+ * @param {number} userId
+ * @param {number} recipeId
+ * @returns {Promise<Recipe>}
+ */
+export const addFavoriteRecipeService = async (userId, recipeId) => {
+  const recipe = await Recipe.findByPk(recipeId);
+
+  if (!recipe) {
+    throw HttpError(404, 'Recipe not found');
+  }
+
+  const existing = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (existing) {
+    throw HttpError(409, 'Recipe already in favorites');
+  }
+
+  await Favorite.create({ userId, recipeId });
+
+  const updatedRecipe = await Recipe.findByPk(recipeId, {
+    include: [
+      {
+        model: Ingredient,
+        as: 'ingredients',
+        through: { attributes: ['measure'] },
+      },
+      {
+        model: Category,
+        as: 'categoryInfo',
+      },
+      {
+        model: Area,
+        as: 'areaInfo',
+      },
+      {
+        model: User,
+        as: 'favoritedBy',
+        attributes: ['id'],
+        through: { attributes: [] },
+      },
+    ],
+  });
+
+  return updatedRecipe;
 };

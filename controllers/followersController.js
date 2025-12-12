@@ -1,6 +1,6 @@
-import * as followersServices from "../services/followersServices.js";
-import HttpError from "../helpers/HttpError.js";
-import UserDTO from "../dtos/UserDTO.js";
+import * as followersServices from '../services/followersServices.js';
+import HttpError from '../helpers/HttpError.js';
+import UserDTO from '../dtos/UserDTO.js';
 
 /**
  * GET /api/users/:id/followers
@@ -10,7 +10,7 @@ export const getFollowers = async (req, res, next) => {
   try {
     const { id } = req.params;
     const followers = await followersServices.getFollowers(id);
-    const formatted = followers.map(f => new UserDTO(f.followerUser));
+    const formatted = followers.map((f) => new UserDTO(f.followerUser));
     res.json(formatted);
   } catch (error) {
     next(error);
@@ -25,7 +25,7 @@ export const getFollowing = async (req, res, next) => {
   try {
     const userId = req.user_id;
     const following = await followersServices.getFollowing(userId);
-    const formatted = following.map(f => new UserDTO(f.followedUser));
+    const formatted = following.map((f) => new UserDTO(f.followedUser));
     res.json(formatted);
   } catch (error) {
     next(error);
@@ -42,12 +42,12 @@ export const followUser = async (req, res, next) => {
     const { followingId } = req.body;
 
     if (followingId === userId) {
-      throw HttpError(400, "You cannot follow yourself");
+      throw HttpError(400, 'You cannot follow yourself');
     }
 
     await followersServices.followUser({ userId, followingId });
 
-    res.json({ message: "Followed successfully" });
+    res.json({ message: 'Followed successfully' });
   } catch (error) {
     next(error);
   }
@@ -64,7 +64,7 @@ export const unfollowUser = async (req, res, next) => {
 
     await followersServices.unfollowUser({ userId, followingId });
 
-    res.json({ message: "Unfollowed successfully" });
+    res.json({ message: 'Unfollowed successfully' });
   } catch (error) {
     next(error);
   }

@@ -1,6 +1,6 @@
-import Follower from "../db/models/Follower.js";
-import User from "../db/models/User.js";
-import HttpError from "../helpers/HttpError.js";
+import Follower from '../db/models/Follower.js';
+import User from '../db/models/User.js';
+import HttpError from '../helpers/HttpError.js';
 
 /**
  * Отримати список підписників конкретного користувача
@@ -10,9 +10,9 @@ export const getFollowers = async (userId) => {
     where: { userId },
     include: {
       model: User,
-      as: "followerUser",
-      attributes: ["id", "name", "email", "avatar"]
-    }
+      as: 'followerUser',
+      attributes: ['id', 'name', 'email', 'avatar'],
+    },
   });
 };
 
@@ -24,9 +24,9 @@ export const getFollowing = async (followerId) => {
     where: { followerId },
     include: {
       model: User,
-      as: "followedUser",
-      attributes: ["id", "name", "email", "avatar"]
-    }
+      as: 'followedUser',
+      attributes: ['id', 'name', 'email', 'avatar'],
+    },
   });
 };
 
@@ -36,10 +36,10 @@ export const getFollowing = async (followerId) => {
 export const followUser = async ({ userId, followingId }) => {
   // Перевірка чи вже підписаний
   const existing = await Follower.findOne({
-    where: { userId: followingId, followerId: userId }
+    where: { userId: followingId, followerId: userId },
   });
 
-  if (existing) throw HttpError(409, "Already following");
+  if (existing) throw HttpError(409, 'Already following');
 
   return await Follower.create({ followerId: userId, userId: followingId });
 };
@@ -49,10 +49,10 @@ export const followUser = async ({ userId, followingId }) => {
  */
 export const unfollowUser = async ({ userId, followingId }) => {
   const relation = await Follower.findOne({
-    where: { userId: followingId, followerId: userId }
+    where: { userId: followingId, followerId: userId },
   });
 
-  if (!relation) throw HttpError(404, "You are not following this user");
+  if (!relation) throw HttpError(404, 'You are not following this user');
 
   return await relation.destroy();
 };

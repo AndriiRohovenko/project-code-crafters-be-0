@@ -86,9 +86,13 @@ class RecipeDTO {
     /**
      * @type {number}
      */
-    this.favoritesCount = recipeData.favoritesCount
-      ? parseInt(recipeData.favoritesCount)
-      : 0;
+    if (typeof recipeData.favoritesCount !== 'undefined') {
+      this.favoritesCount = Number(recipeData.favoritesCount) || 0;
+    } else if (Array.isArray(recipeData.favoritedBy)) {
+      this.favoritesCount = recipeData.favoritedBy.length;
+    } else {
+      this.favoritesCount = 0;
+    }
   }
 }
 

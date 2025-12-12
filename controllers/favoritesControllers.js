@@ -1,4 +1,7 @@
-import { getFavoriteRecipesService } from '../services/favoritesServices.js';
+import {
+  addFavoriteRecipeService,
+  getFavoriteRecipesService,
+} from '../services/favoritesServices.js';
 import RecipeDTO from '../dtos/RecipeDTO.js';
 
 /**
@@ -6,23 +9,28 @@ import RecipeDTO from '../dtos/RecipeDTO.js';
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
- * @returns {Promise<void>}
  */
 export const getFavoriteRecipesController = async (req, res) => {
   const recipes = await getFavoriteRecipesService(req.user.id);
 
-  const recipesDTO = recipes.map((recipe) => {
-    const data = recipe.toJSON();
-
-    const favoritesCount = Array.isArray(data.favoritedBy)
-      ? data.favoritedBy.length
-      : 0;
-
-    return new RecipeDTO({
-      ...data,
-      favoritesCount,
-    });
-  });
+  const recipesDTO = recipes.map((recipe) => new RecipeDTO(recipe));
 
   res.json(recipesDTO);
+};
+
+/**
+ * Add recipe to user's favorites.
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+export const addFavoriteRecipeController = async (req, res) => {
+  const { recipeId } = req.params;
+  const userId = req.user.id;
+
+  const recipe = await addFavoriteRecipeService(userId, recipeId);
+
+  const dto = new RecipeDTO(recipe);
+
+  res.status(201).json(dto);
 };
