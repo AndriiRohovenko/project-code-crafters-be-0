@@ -1,20 +1,22 @@
-import "dotenv/config";
-import path from "node:path";
+import 'dotenv/config';
 
-import express from "express";
-import cors from "cors";
-import connectDB from "./db/connection.js";
-import syncDB from "./db/sync.js";
+import express from 'express';
+import cors from 'cors';
+import connectDB from './db/connection.js';
+import syncDB from './db/sync.js';
 
-import notFoundHandler from "./middlewares/notFoundHandler.js";
-import errorHandler from "./middlewares/errorHandler.js";
-import FileUploadErrorHandler from "./middlewares/multerErrorHandler.js";
+import notFoundHandler from './middlewares/notFoundHandler.js';
+import errorHandler from './middlewares/errorHandler.js';
+import FileUploadErrorHandler from './middlewares/multerErrorHandler.js';
 
-import testimonialRouter from "./routes/TestimonialRouter.js";
-import areaRouter from "./routes/AreaRouter.js";
-import usersRouter from "./routes/usersRouter.js";
-import categoriesRouter from "./routes/CategoriesRouter.js";
-import ingredientsRouter from "./routes/ingredientsRouter.js";
+import testimonialRouter from './routes/TestimonialRouter.js';
+import areaRouter from './routes/AreaRouter.js';
+import usersRouter from './routes/usersRouter.js';
+
+import categoriesRouter from './routes/CategoriesRouter.js';
+import ingredientsRouter from './routes/ingredientsRouter.js';
+import recipesRouter from './routes/recipesRouter.js';
+import authRouter from './routes/authRouter.js';
 
 const app = express();
 
@@ -25,14 +27,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/testimonials", testimonialRouter);
-app.use("/api/areas", areaRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/categories", categoriesRouter);
-app.use("/api/ingredients", ingredientsRouter);
+app.use('/api/testimonials', testimonialRouter);
+app.use('/api/areas', areaRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/ingredients', ingredientsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/recipes', recipesRouter);
 
-app.use("/", (req, res) => {
-  res.send("Requested root path");
+app.use('/', (req, res) => {
+  res.send('Requested root path');
 });
 
 app.use(notFoundHandler);
