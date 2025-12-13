@@ -4,19 +4,43 @@ import {
   removeFavoriteRecipeService,
 } from '../services/favoritesServices.js';
 import RecipeDTO from '../dtos/RecipeDTO.js';
+import {
+  DEFAULT_LIMIT,
+  DEFAULT_PAGE,
+  MIN_LIMIT,
+  MIN_PAGE,
+} from '../constants/paginationConstants.js';
 
 /**
- * Get favorite recipes for the authenticated user.
+ * Get favorite recipes for the authenticated user (with pagination).
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
 export const getFavoriteRecipesController = async (req, res) => {
-  const recipes = await getFavoriteRecipesService(req.user.id);
+  const rawPage = Number(req.query.page) || DEFAULT_PAGE;
+  const rawLimit = Number(req.query.limit) || DEFAULT_LIMIT;
 
-  const recipesDTO = recipes.map((recipe) => new RecipeDTO(recipe));
+  const page = rawPage < MIN_PAGE ? MIN_PAGE : rawPage;
+  const limit = rawLimit < MIN_LIMIT ? MIN_LIMIT : rawLimit;
 
-  res.json(recipesDTO);
+  const { recipes, totalItems } = await getFavoriteRecipesService(req.user.id, {
+    page,
+    limit,
+  });
+
+  const data = recipes.map((recipe) => new RecipeDTO(recipe));
+  const totalPages = totalItems === 0 ? 1 : Math.ceil(totalItems / limit);
+
+  res.json({
+    data,
+    meta: {
+      totalItems,
+      totalPages,
+      currentPage: page,
+      itemsPerPage: limit,
+    },
+  });
 };
 
 /**

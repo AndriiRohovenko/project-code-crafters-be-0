@@ -7,49 +7,62 @@ import HttpError from '../helpers/HttpError.js';
 import Favorite from '../db/models/Favorite.js';
 
 /**
- * Get all favorite recipes for a specific user with related data.
+ * Get paginated favorite recipes for a specific user with related data.
  *
  * @param {number} userId - ID of the user
- * @returns {Promise<Array>} - List of favorite recipes with ingredients
+ * @param {{ page?: number, limit?: number }} options - Pagination options
+ * @returns {Promise<{ recipes: Recipe[], totalItems: number, page: number, limit: number }>}
  */
-export const getFavoriteRecipesService = async (userId) => {
-  const user = await User.findByPk(userId, {
-    include: [
-      {
-        model: Recipe,
-        as: 'favoriteRecipes',
-        include: [
-          {
-            model: Ingredient,
-            as: 'ingredients',
-            through: {
-              attributes: ['measure'],
-            },
-          },
-          {
-            model: Category,
-            as: 'categoryInfo',
-          },
-          {
-            model: Area,
-            as: 'areaInfo',
-          },
-          {
-            model: User,
-            as: 'favoritedBy',
-            attributes: ['id'],
-            through: { attributes: [] },
-          },
-        ],
-      },
-    ],
-  });
+export const getFavoriteRecipesService = async (
+  userId,
+  { page = 1, limit = 10 } = {}
+) => {
+  const user = await User.findByPk(userId);
 
   if (!user) {
     throw HttpError(404, 'User not found');
   }
 
-  return user.favoriteRecipes;
+  const offset = (page - 1) * limit;
+
+  const { rows, count } = await Recipe.findAndCountAll({
+    include: [
+      {
+        model: User,
+        as: 'favoritedBy',
+        attributes: ['id'],
+        through: { attributes: [] },
+        where: { id: userId },
+        required: true,
+      },
+      {
+        model: Ingredient,
+        as: 'ingredients',
+        through: {
+          attributes: ['measure'],
+        },
+      },
+      {
+        model: Category,
+        as: 'categoryInfo',
+      },
+      {
+        model: Area,
+        as: 'areaInfo',
+      },
+    ],
+    distinct: true,
+    limit,
+    offset,
+    order: [['id', 'ASC']],
+  });
+
+  return {
+    recipes: rows,
+    totalItems: count,
+    page,
+    limit,
+  };
 };
 
 /**
