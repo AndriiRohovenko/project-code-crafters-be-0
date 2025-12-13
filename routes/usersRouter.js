@@ -263,10 +263,9 @@ usersRouter.delete(
  * /api/users/avatar:
  *   put:
  *     summary: Upload user avatar
- *     tags:
- *       - Users
- *    security:
- *     - bearerAuth: []
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -285,7 +284,7 @@ usersRouter.delete(
 usersRouter.put(
   '/avatar',
   authenticate,
-  uploadImage.single('image'),
+  uploadImage.single('avatar'),
   usersControllers.updateUserAvatar
 );
 

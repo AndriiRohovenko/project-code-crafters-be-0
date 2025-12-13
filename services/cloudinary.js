@@ -25,4 +25,4 @@ const uploadImageToCloudinary = async (fileBuffer, folder) => {
   });
 };
 
-export default { uploadImageToCloudinary };
+export default uploadImageToCloudinary;

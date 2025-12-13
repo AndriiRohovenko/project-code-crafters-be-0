@@ -72,8 +72,6 @@ export const updateUser = async (id, updateData) => {
     return null;
   }
 
-  await user.update(updateData, {
-    fields: ['name', 'email', 'avatarUrl'],
-  });
+  await user.update(updateData);
   return user;
 };

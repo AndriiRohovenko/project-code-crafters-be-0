@@ -71,9 +71,14 @@ export const updateUserAvatar = async (req, res, next) => {
     }
 
     const result = await uploadImageToCloudinary(req.file.buffer, 'avatars');
+    if (!result || !result.secure_url) {
+      throw HttpError(500, 'Failed to upload image to Cloudinary');
+    }
     const avatarUrl = result.secure_url;
 
-    const updatedUser = await usersServices.updateUser(userId, { avatarUrl });
+    const updatedUser = await usersServices.updateUser(userId, {
+      avatar: avatarUrl,
+    });
 
     if (!updatedUser) {
       throw HttpError(404, 'User not found');
