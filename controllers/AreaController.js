@@ -1,11 +1,12 @@
 import { getAreas } from '../services/AreaService.js';
-import HttpError from '../helpers/HttpError.js';
+import AreaDTO from '../dtos/AreaDTO.js';
 
 export const getAll = async (req, res, next) => {
   try {
     const areas = await getAreas();
-    res.json(areas);
+    const areasDTO = areas.map((area) => new AreaDTO(area));
+    res.json(areasDTO);
   } catch (error) {
-    next(HttpError(500));
+    next(error);
   }
 };

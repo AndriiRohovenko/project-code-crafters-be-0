@@ -1,17 +1,13 @@
 import { getTestimonials } from '../services/TestimonialService.js';
-import HttpError from '../helpers/HttpError.js';
+import TestimonialDTO from '../dtos/TestimonialDTO.js';
 
 export const getAll = async (req, res, next) => {
   try {
     const testimonials = await getTestimonials();
-    const result = testimonials.map((testimonial) => {
-      const { owner, ...rest } = testimonial.toJSON();
-      return {
-        ...rest,
-        ownerName: owner?.name || 'Unknown',
-      };
-    });
-    res.json(result);
+    const testimonialsDTO = testimonials.map(
+      (testimonial) => new TestimonialDTO(testimonial)
+    );
+    res.json(testimonialsDTO);
   } catch (error) {
     next(error);
   }
