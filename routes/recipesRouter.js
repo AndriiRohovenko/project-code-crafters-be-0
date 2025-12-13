@@ -161,8 +161,42 @@ recipesRouter.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Видалити власний рецепт
+ *     tags: [Recipes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID рецепта
+ *     responses:
+ *       204:
+ *         description: Рецепт успішно видалено
+ *       401:
+ *         description: Не авторизовано
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Немає прав для видалення цього рецепту
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Рецепт не знайдено
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 recipesRouter.get('/:id', RecipesController.getRecipeById);
+recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
 
 /**
  * @swagger

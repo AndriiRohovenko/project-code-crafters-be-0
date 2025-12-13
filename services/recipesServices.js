@@ -254,3 +254,31 @@ export const createRecipe = async (recipeData, userId) => {
     throw error;
   }
 };
+
+/**
+ * Delete a recipe by ID
+ * @param {number} recipeId - Recipe ID
+ * @returns {Promise<void>}
+ */
+export const deleteRecipe = async (recipeId) => {
+  const transaction = await sequelize.transaction();
+
+  try {
+    // Delete recipe ingredients first (cascade)
+    await RecipeIngredient.destroy({
+      where: { recipeId },
+      transaction,
+    });
+
+    // Delete the recipe
+    await Recipe.destroy({
+      where: { id: recipeId },
+      transaction,
+    });
+
+    await transaction.commit();
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+};

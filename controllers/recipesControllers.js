@@ -103,6 +103,33 @@ export const getUserRecipes = async (req, res, next) => {
 };
 
 /**
+ * Delete user's own recipe (private endpoint)
+ */
+export const deleteRecipe = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const recipe = await RecipesService.getRecipeById(parseInt(id));
+
+    if (!recipe) {
+      throw HttpError(404, 'Recipe not found');
+    }
+
+    // Check if user owns the recipe
+    if (recipe.userId !== userId) {
+      throw HttpError(403, 'You do not have permission to delete this recipe');
+    }
+
+    await RecipesService.deleteRecipe(parseInt(id));
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Create a new recipe (private endpoint)
  */
 export const createRecipe = async (req, res, next) => {
