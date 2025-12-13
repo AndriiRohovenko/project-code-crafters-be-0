@@ -3,9 +3,6 @@ import User from '../db/models/User.js';
 
 async function getTestimonials() {
   return await Testimonial.findAll({
-    attributes: {
-      exclude: ['ownerId', 'createdAt', 'updatedAt'],
-    },
     include: [
       {
         model: User,
