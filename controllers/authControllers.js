@@ -1,4 +1,3 @@
-import UserDTO from '../dtos/UserDTO.js';
 import { normalizeEmail } from '../helpers/normalizeEmail.js';
 import {
   createUserService,
@@ -10,7 +9,7 @@ import {
  * Create a new user.
  *
  * Normalizes the email, delegates user creation to the service layer,
- * and returns a sanitized DTO representation of the created user.
+ * and returns only the authentication token.
  *
  * @param {import("express").Request} req - Express request object
  * @param {import("express").Response} res - Express response object
@@ -20,24 +19,19 @@ export const createUserController = async (req, res) => {
   const { email } = req.body;
   const normalizedEmail = normalizeEmail(email);
 
-  const user = await createUserService({
+  const { token } = await createUserService({
     ...req.body,
     email: normalizedEmail,
   });
 
-  const userDto = UserDTO.fromModel(user);
-
-  return res.status(201).json({
-    user: userDto,
-  });
+  return res.status(201).json({ token });
 };
 
 /**
  * Login user.
  *
  * Normalizes the email, validates credentials through the service layer,
- * generates a JWT token, updates the user record, and returns a DTO
- * together with the authentication token.
+ * and returns only the authentication token.
  *
  * @param {import("express").Request} req - Express request object
  * @param {import("express").Response} res - Express response object
@@ -47,14 +41,12 @@ export const loginUserController = async (req, res) => {
   const { email } = req.body;
   const normalizedEmail = normalizeEmail(email);
 
-  const { user, token } = await loginUserService({
+  const { token } = await loginUserService({
     ...req.body,
     email: normalizedEmail,
   });
 
-  const userDto = UserDTO.fromModel(user);
-
-  res.json({ user: userDto, token });
+  res.json({ token });
 };
 
 /**

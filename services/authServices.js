@@ -17,10 +17,26 @@ export const findUserService = async (filter, options = {}) => {
 };
 
 /**
- * Create a new user
+ * Generate JWT token for a user and persist it in DB.
+ *
+ * @param {Object} user - Sequelize user instance
+ * @returns {Promise<string>} - Generated token
+ * @private
+ */
+const issueAuthToken = async (user) => {
+  const payload = { id: user.id };
+  const token = createToken(payload);
+
+  await user.update({ token });
+
+  return token;
+};
+
+/**
+ * Create a new user and issue auth token.
  *
  * @param {Object} userData - User registration data
- * @returns {Object} - Created user
+ * @returns {Promise<{ token: string }>} - Auth token
  */
 export const createUserService = async (userData) => {
   const existingUser = await findUserService({ email: userData.email });
@@ -36,16 +52,18 @@ export const createUserService = async (userData) => {
     password: hashedPassword,
   });
 
-  return user;
+  const token = await issueAuthToken(user);
+
+  return { token };
 };
 
 /**
- * Login user
+ * Login user and issue auth token.
  *
  * @param {Object} credentials - User login data
  * @param {string} credentials.email - User email
  * @param {string} credentials.password - User password
- * @returns {Object} - Auth data with user and token
+ * @returns {Promise<{ token: string }>} - Auth token
  */
 export const loginUserService = async ({ email, password }) => {
   const user = await findUserService({ email });
@@ -60,18 +78,9 @@ export const loginUserService = async ({ email, password }) => {
     throw HttpError(401, 'Email or password is wrong');
   }
 
-  const payload = {
-    id: user.id,
-  };
+  const token = await issueAuthToken(user);
 
-  const token = createToken(payload);
-
-  await user.update({ token });
-
-  return {
-    user,
-    token,
-  };
+  return { token };
 };
 
 /**
