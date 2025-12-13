@@ -76,6 +76,33 @@ export const getPopularRecipes = async (req, res, next) => {
 };
 
 /**
+ * Get user's own recipes (private endpoint)
+ */
+export const getUserRecipes = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const userId = req.user.id;
+
+    const result = await RecipesService.getUserRecipes({
+      userId,
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
+    const recipesDTOs = result.recipes.map((recipe) => new RecipeDTO(recipe));
+
+    res.json({
+      recipes: recipesDTOs,
+      total: result.total,
+      page: result.page,
+      totalPages: result.totalPages,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * Create a new recipe (private endpoint)
  */
 export const createRecipe = async (req, res, next) => {

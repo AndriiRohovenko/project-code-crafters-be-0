@@ -155,6 +155,50 @@ export const getPopularRecipes = async (limit = 4) => {
 };
 
 /**
+ * Get user's own recipes with pagination
+ * @param {Object} filters - Filter options
+ * @param {number} filters.userId - User ID
+ * @param {number} [filters.page=1] - Page number
+ * @param {number} [filters.limit=10] - Items per page
+ * @returns {Promise<{recipes: Array, total: number, page: number, totalPages: number}>}
+ */
+export const getUserRecipes = async ({ userId, page = 1, limit = 10 }) => {
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await Recipe.findAndCountAll({
+    where: { userId },
+    include: [
+      {
+        model: Category,
+        as: 'categoryInfo',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: Area,
+        as: 'areaInfo',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: Ingredient,
+        as: 'ingredients',
+        attributes: ['id', 'name', 'img'],
+        through: { attributes: ['measure'] },
+      },
+    ],
+    limit: parseInt(limit),
+    offset: parseInt(offset),
+    order: [['createdAt', 'DESC']],
+  });
+
+  return {
+    recipes: rows,
+    total: count,
+    page: parseInt(page),
+    totalPages: Math.ceil(count / limit),
+  };
+};
+
+/**
  * Create a new recipe
  * @param {Object} recipeData - Recipe data
  * @param {number} userId - User ID who creates the recipe

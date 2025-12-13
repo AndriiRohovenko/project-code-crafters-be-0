@@ -82,6 +82,61 @@ recipesRouter.get('/popular', RecipesController.getPopularRecipes);
 
 /**
  * @swagger
+ * /api/recipes/my-recipes:
+ *   get:
+ *     summary: Отримати власні рецепти користувача
+ *     tags: [Recipes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Номер сторінки
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Кількість елементів на сторінці
+ *     responses:
+ *       200:
+ *         description: Список власних рецептів користувача
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 recipes:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Recipe'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *       401:
+ *         description: Не авторизовано
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+recipesRouter.get(
+  '/my-recipes',
+  authenticate,
+  RecipesController.getUserRecipes
+);
+
+/**
+ * @swagger
  * /api/recipes/{id}:
  *   get:
  *     summary: Отримати рецепт по ID
