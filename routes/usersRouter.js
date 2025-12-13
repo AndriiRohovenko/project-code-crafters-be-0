@@ -7,6 +7,7 @@ import {
   followUserSchema,
   unfollowUserSchema,
 } from '../schemas/usersSchemas.js';
+import uploadImage from '../middlewares/upload.js';
 
 const usersRouter = express.Router();
 
@@ -255,6 +256,36 @@ usersRouter.delete(
   authenticate,
   validateBody(unfollowUserSchema),
   followersController.unfollowUser
+);
+
+/**
+ * @swagger
+ * /api/users/avatar:
+ *   put:
+ *     summary: Upload user avatar
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Avatar uploaded successfully
+ */
+
+usersRouter.put(
+  '/avatar',
+  authenticate,
+  uploadImage.single('avatar'),
+  usersControllers.updateUserAvatar
 );
 
 export default usersRouter;
