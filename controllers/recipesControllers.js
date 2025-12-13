@@ -92,7 +92,7 @@ export const createRecipe = async (req, res, next) => {
     }
 
     // Get user ID from authenticated request
-    const userId = req.user_id;
+    const userId = req.user.id;
 
     // Create recipe
     const recipe = await RecipesService.createRecipe(value, userId);
