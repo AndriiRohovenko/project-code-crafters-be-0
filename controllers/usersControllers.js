@@ -1,6 +1,7 @@
 import * as usersServices from '../services/usersServices.js';
 import HttpError from '../helpers/HttpError.js';
 import UserDTO from '../dtos/UserDTO.js';
+import uploadImageToCloudinary from '../services/cloudinary.js';
 
 /**
  * GET /api/users
@@ -57,6 +58,28 @@ export const getCurrentUser = async (req, res, next) => {
     }
 
     res.json(new UserDTO(user));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateUserAvatar = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    if (!req.file) {
+      throw HttpError(400, 'No file uploaded');
+    }
+
+    const result = await uploadImageToCloudinary(req.file.buffer, 'avatars');
+    const avatarUrl = result.secure_url;
+
+    const updatedUser = await usersServices.updateUser(userId, { avatarUrl });
+
+    if (!updatedUser) {
+      throw HttpError(404, 'User not found');
+    }
+
+    res.json(new UserDTO(updatedUser));
   } catch (error) {
     next(error);
   }

@@ -9,7 +9,6 @@ import syncDB from './db/sync.js';
 
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
-import FileUploadErrorHandler from './middlewares/multerErrorHandler.js';
 
 import testimonialRouter from './routes/TestimonialRouter.js';
 import areaRouter from './routes/AreaRouter.js';
@@ -47,7 +46,6 @@ app.use('/', (req, res) => {
 });
 
 app.use(notFoundHandler);
-app.use(FileUploadErrorHandler);
 app.use(errorHandler);
 await syncDB();
 await connectDB();

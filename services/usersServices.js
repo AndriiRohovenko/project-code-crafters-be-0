@@ -59,3 +59,21 @@ export const getUserById = async (id) => {
 
   return user;
 };
+
+/**
+ * Оновити інформацію користувача
+ * @param {number} id - ID користувача
+ * @param {Object} updateData - Дані для оновлення
+ * @returns {Object} - Оновлений користувач
+ */
+export const updateUser = async (id, updateData) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    return null;
+  }
+
+  await user.update(updateData, {
+    fields: ['name', 'email', 'avatarUrl'],
+  });
+  return user;
+};
