@@ -185,10 +185,6 @@ const options = {
               type: 'string',
               description: 'Текст відгука',
             },
-            avatar: {
-              type: 'string',
-              description: 'URL аватара автора',
-            },
           },
         },
         RegisterRequest: {

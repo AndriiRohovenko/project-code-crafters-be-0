@@ -3,8 +3,8 @@ export default class TestimonialDTO {
     /** @type {string} */
     this.id = testimonial.id;
     /** @type {string} */
-    this.ownerName = testimonial.owner.name;
+    this.owner = testimonial.owner.name;
     /** @type {string} */
-    this.testimonial = testimonial.testimonial;
+    this.comment = testimonial.testimonial;
   }
 }
