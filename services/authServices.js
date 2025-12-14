@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import HttpError from '../helpers/HttpError.js';
 import User from '../db/models/User.js';
 import { createToken } from '../helpers/jwt.js';
+import sequelize from '../db/sequelize.js';
 
 /**
  * Find a user by the provided filter criteria.
@@ -18,43 +19,60 @@ export const findUserService = async (filter, options = {}) => {
 
 /**
  * Generate JWT token for a user and persist it in DB.
+ * Must be executed inside an active transaction.
  *
  * @param {Object} user - Sequelize user instance
- * @returns {Promise<string>} - Generated token
+ * @param {import('sequelize').Transaction} transaction - Active Sequelize transaction
+ * @returns {Promise<string>} - Generated JWT token
+ * @throws {HttpError} If token generation or persistence fails
  * @private
  */
-const issueAuthToken = async (user) => {
+const issueAuthToken = async (user, transaction) => {
   const payload = { id: user.id };
-  const token = createToken(payload);
 
-  await user.update({ token });
+  let token;
+  try {
+    token = createToken(payload);
+  } catch {
+    throw HttpError(500, 'Token generation failed');
+  }
+
+  await user.update({ token }, { transaction });
 
   return token;
 };
 
 /**
- * Create a new user and issue auth token.
+ * Create a new user and issue an authentication token.
+ * User creation and token persistence are executed atomically
+ * within a database transaction.
  *
  * @param {Object} userData - User registration data
  * @returns {Promise<{ token: string }>} - Auth token
+ * @throws {HttpError} If email already exists or token issuance fails
  */
 export const createUserService = async (userData) => {
-  const existingUser = await findUserService({ email: userData.email });
+  return sequelize.transaction(async (transaction) => {
+    const existingUser = await findUserService(
+      { email: userData.email },
+      { transaction }
+    );
 
-  if (existingUser) {
-    throw HttpError(409, 'Email already in use');
-  }
+    if (existingUser) {
+      throw HttpError(409, 'Email already in use');
+    }
 
-  const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-  const user = await User.create({
-    ...userData,
-    password: hashedPassword,
+    const user = await User.create(
+      { ...userData, password: hashedPassword },
+      { transaction }
+    );
+
+    const token = await issueAuthToken(user, transaction);
+
+    return { token };
   });
-
-  const token = await issueAuthToken(user);
-
-  return { token };
 };
 
 /**
