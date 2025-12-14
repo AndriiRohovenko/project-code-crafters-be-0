@@ -23,7 +23,7 @@ export const getFollowers = async (req, res, next) => {
  */
 export const getFollowing = async (req, res, next) => {
   try {
-    const userId = req.user_id;
+    const userId = req.user.id;
     const following = await followersServices.getFollowing(userId);
     const formatted = following.map((f) => new UserDTO(f.followedUser));
     res.json(formatted);
@@ -38,7 +38,7 @@ export const getFollowing = async (req, res, next) => {
  */
 export const followUser = async (req, res, next) => {
   try {
-    const userId = req.user_id;
+    const userId = req.user.id;
     const { followingId } = req.body;
 
     if (followingId === userId) {
@@ -59,7 +59,7 @@ export const followUser = async (req, res, next) => {
  */
 export const unfollowUser = async (req, res, next) => {
   try {
-    const userId = req.user_id;
+    const userId = req.user.id;
     const { followingId } = req.body;
 
     await followersServices.unfollowUser({ userId, followingId });
