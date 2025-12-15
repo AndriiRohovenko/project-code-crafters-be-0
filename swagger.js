@@ -109,6 +109,9 @@ const options = {
               },
               description: 'Теги рецепта',
             },
+            author: {
+              $ref: '#/components/schemas/Author',
+            },
             createdAt: {
               type: 'string',
               format: 'date-time',
@@ -116,6 +119,23 @@ const options = {
             updatedAt: {
               type: 'string',
               format: 'date-time',
+            },
+          },
+        },
+        Author: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'ID автора',
+            },
+            name: {
+              type: 'string',
+              description: "Ім'я автора",
+            },
+            avatar: {
+              type: 'string',
+              description: 'URL аватара',
             },
           },
         },
