@@ -4,6 +4,7 @@ import {
   Ingredient,
   Recipe,
   RecipeIngredient,
+  User,
 } from '../db/models/associations.js';
 import sequelize from '../db/sequelize.js';
 
@@ -43,6 +44,11 @@ export const searchRecipes = async ({
       as: 'ingredients',
       attributes: ['id', 'name', 'img'],
       through: { attributes: ['measure'] },
+    },
+    {
+      model: User,
+      as: 'owner',
+      attributes: ['id', 'name', 'avatar'],
     },
   ];
 
@@ -104,6 +110,11 @@ export const getRecipeById = async (recipeId) => {
         attributes: ['id', 'name', 'img'],
         through: { attributes: ['measure'] },
       },
+      {
+        model: User,
+        as: 'owner',
+        attributes: ['id', 'name', 'avatar'],
+      },
     ],
   });
 
@@ -146,6 +157,11 @@ export const getPopularRecipes = async (limit = 4) => {
         attributes: ['id', 'name', 'img'],
         through: { attributes: ['measure'] },
       },
+      {
+        model: User,
+        as: 'owner',
+        attributes: ['id', 'name', 'avatar'],
+      },
     ],
     order: [[sequelize.literal('"favoritesCount"'), 'DESC']],
     limit: parseInt(limit),
@@ -183,6 +199,11 @@ export const getUserRecipes = async ({ userId, page = 1, limit = 10 }) => {
         as: 'ingredients',
         attributes: ['id', 'name', 'img'],
         through: { attributes: ['measure'] },
+      },
+      {
+        model: User,
+        as: 'owner',
+        attributes: ['id', 'name', 'avatar'],
       },
     ],
     limit: parseInt(limit),

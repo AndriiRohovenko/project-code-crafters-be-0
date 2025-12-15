@@ -67,6 +67,19 @@ class RecipeDTO {
     this.areaId = recipeData.areaId;
 
     /**
+     * @type {{id: number, name: string, avatar: string} | null}
+     */
+    if (recipeData.owner) {
+      this.author = {
+        id: recipeData.owner.id,
+        name: recipeData.owner.name,
+        avatar: recipeData.owner.avatar,
+      };
+    } else {
+      this.author = null;
+    }
+
+    /**
      * @type {RecipeIngredient[]}
      */
     if (recipeData.ingredients) {
