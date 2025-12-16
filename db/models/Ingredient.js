@@ -14,6 +14,10 @@ const Ingredient = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    desc: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     img: {
       type: DataTypes.STRING,
       allowNull: true,
