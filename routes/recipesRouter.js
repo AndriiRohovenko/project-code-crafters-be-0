@@ -18,15 +18,15 @@ const recipesRouter = express.Router();
  *           type: string
  *         description: Пошуковий запит
  *       - in: query
- *         name: category
+ *         name: categoryId
  *         schema:
- *           type: string
- *         description: Фільтр по категорії
+ *           type: integer
+ *         description: ID категорії для фільтрації
  *       - in: query
- *         name: area
+ *         name: areaId
  *         schema:
- *           type: string
- *         description: Фільтр по регіону кухні
+ *           type: integer
+ *         description: ID регіону кухні для фільтрації
  *       - in: query
  *         name: page
  *         schema:
@@ -215,6 +215,9 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *             type: object
  *             required:
  *               - title
+
+ *               - categoryId
+
  *               - instructions
  *             properties:
  *               title:
@@ -222,17 +225,15 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *                 minLength: 3
  *                 maxLength: 255
  *                 description: Назва рецепта
- *                 example: "Pasta Carbonara"
+
+
  *               categoryId:
  *                 type: integer
- *                 minimum: 1
  *                 description: ID категорії рецепта
- *                 example: 1
  *               areaId:
  *                 type: integer
- *                 minimum: 1
  *                 description: ID регіону кухні
- *                 example: 2
+
  *               instructions:
  *                 type: string
  *                 minLength: 10
