@@ -41,7 +41,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipesRouter);
 app.use('/api/favorites', favoritesRouter);
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Requested root path');
 });
 
