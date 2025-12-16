@@ -2,6 +2,7 @@ import * as RecipesService from '../services/recipesServices.js';
 import RecipeDTO from '../dtos/RecipeDTO.js';
 import { createRecipeSchema } from '../schemas/recipeSchemas.js';
 import HttpError from '../helpers/HttpError.js';
+import uploadImageToCloudinary from '../services/cloudinary.js';
 
 /**
  * Search recipes by category, ingredient, and area with pagination
@@ -134,6 +135,21 @@ export const deleteRecipe = async (req, res, next) => {
  */
 export const createRecipe = async (req, res, next) => {
   try {
+    // Parse ingredients if it's a string (from FormData)
+    if (req.body.ingredients && typeof req.body.ingredients === 'string') {
+      try {
+        req.body.ingredients = JSON.parse(req.body.ingredients);
+      } catch {
+        throw HttpError(400, 'Invalid ingredients format');
+      }
+    }
+
+    // Convert numeric string fields to numbers (from FormData)
+    if (req.body.categoryId)
+      req.body.categoryId = parseInt(req.body.categoryId);
+    if (req.body.areaId) req.body.areaId = parseInt(req.body.areaId);
+    if (req.body.time) req.body.time = parseInt(req.body.time);
+
     const { error, value } = createRecipeSchema.validate(req.body, {
       abortEarly: false,
     });
@@ -148,8 +164,18 @@ export const createRecipe = async (req, res, next) => {
     // Get user ID from authenticated request
     const userId = req.user.id;
 
-    // Create recipe
-    const recipe = await RecipesService.createRecipe(value, userId);
+    // Upload image to Cloudinary if file is provided
+    let thumbUrl = value.thumb;
+    if (req.file) {
+      const result = await uploadImageToCloudinary(req.file.buffer, 'recipes');
+      thumbUrl = result.secure_url;
+    }
+
+    // Create recipe with uploaded image URL
+    const recipe = await RecipesService.createRecipe(
+      { ...value, thumb: thumbUrl },
+      userId
+    );
 
     const recipeDTO = new RecipeDTO(recipe);
 

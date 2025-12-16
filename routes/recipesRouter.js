@@ -1,6 +1,7 @@
 import express from 'express';
 import * as RecipesController from '../controllers/recipesControllers.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import uploadImage from '../middlewares/upload.js';
 
 const recipesRouter = express.Router();
 
@@ -209,7 +210,7 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -244,33 +245,17 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *                 example: "Classic Italian pasta dish with creamy sauce"
  *               thumb:
  *                 type: string
- *                 format: uri
- *                 description: URL зображення рецепта
- *                 example: "https://example.com/pasta-carbonara.jpg"
+ *                 format: binary
+ *                 description: Файл зображення рецепта (JPG, PNG, max 5MB)
  *               time:
  *                 type: integer
  *                 minimum: 1
  *                 description: Час приготування (хвилини)
  *                 example: 30
  *               ingredients:
- *                 type: array
- *                 minItems: 1
- *                 description: Масив інгредієнтів
- *                 items:
- *                   type: object
- *                   required:
- *                     - ingredientId
- *                   properties:
- *                     ingredientId:
- *                       type: integer
- *                       minimum: 1
- *                       description: ID інгредієнта
- *                       example: 5
- *                     measure:
- *                       type: string
- *                       maxLength: 100
- *                       description: Кількість/міра інгредієнта
- *                       example: "400g"
+ *                 type: string
+ *                 description: JSON масив інгредієнтів (stringified)
+ *                 example: '[{"ingredientId":5,"measure":"400g"},{"ingredientId":10,"measure":"200g"}]'
  *     responses:
  *       201:
  *         description: Рецепт успішно створено
@@ -300,6 +285,11 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-recipesRouter.post('/', authenticate, RecipesController.createRecipe);
+recipesRouter.post(
+  '/',
+  authenticate,
+  uploadImage.single('thumb'),
+  RecipesController.createRecipe
+);
 
 export default recipesRouter;
