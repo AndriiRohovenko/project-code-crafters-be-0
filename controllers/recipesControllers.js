@@ -138,9 +138,17 @@ export const createRecipe = async (req, res, next) => {
     // Parse ingredients if it's a string (from FormData)
     if (req.body.ingredients && typeof req.body.ingredients === 'string') {
       try {
-        req.body.ingredients = JSON.parse(req.body.ingredients);
+        const trimmed = req.body.ingredients.trim();
+        if (trimmed) {
+          req.body.ingredients = JSON.parse(trimmed);
+        } else {
+          req.body.ingredients = undefined;
+        }
       } catch {
-        throw HttpError(400, 'Invalid ingredients format');
+        throw HttpError(
+          400,
+          `Invalid ingredients format. Must be valid JSON array. Received: ${req.body.ingredients}`
+        );
       }
     }
 
