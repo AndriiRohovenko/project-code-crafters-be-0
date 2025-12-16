@@ -214,43 +214,79 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *             type: object
  *             required:
  *               - title
- *               - category
  *               - instructions
  *             properties:
  *               title:
  *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 255
  *                 description: Назва рецепта
- *               category:
- *                 type: string
- *                 description: Категорія рецепта
- *               area:
- *                 type: string
- *                 description: Регіон кухні
+ *                 example: "Pasta Carbonara"
+ *               categoryId:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: ID категорії рецепта
+ *                 example: 1
+ *               areaId:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: ID регіону кухні
+ *                 example: 2
  *               instructions:
  *                 type: string
+ *                 minLength: 10
  *                 description: Інструкції приготування
+ *                 example: "Cook pasta until al dente. Fry bacon until crispy. Mix pasta with bacon and eggs."
  *               description:
  *                 type: string
+ *                 maxLength: 1000
  *                 description: Опис рецепта
- *               time:
+ *                 example: "Classic Italian pasta dish with creamy sauce"
+ *               thumb:
  *                 type: string
- *                 description: Час приготування
+ *                 format: uri
+ *                 description: URL зображення рецепта
+ *                 example: "https://example.com/pasta-carbonara.jpg"
+ *               time:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: Час приготування (хвилини)
+ *                 example: 30
  *               ingredients:
  *                 type: array
+ *                 minItems: 1
+ *                 description: Масив інгредієнтів
  *                 items:
  *                   type: object
+ *                   required:
+ *                     - ingredientId
  *                   properties:
- *                     id:
+ *                     ingredientId:
  *                       type: integer
+ *                       minimum: 1
+ *                       description: ID інгредієнта
+ *                       example: 5
  *                     measure:
  *                       type: string
+ *                       maxLength: 100
+ *                       description: Кількість/міра інгредієнта
+ *                       example: "400g"
  *     responses:
  *       201:
  *         description: Рецепт успішно створено
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Recipe'
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "success"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     recipe:
+ *                       $ref: '#/components/schemas/Recipe'
  *       400:
  *         description: Невалідні дані
  *         content:
