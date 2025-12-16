@@ -26,9 +26,7 @@ module.exports = {
     const recipes = [
       {
         title: 'Battenberg Cake',
-        category: 'Dessert',
         categoryId: categoryMap['Dessert'],
-        area: 'British',
         areaId: areaMap['British'],
         instructions:
           'Heat oven to 180C/160C fan/gas 4 and line the base and sides of a 20cm square tin with baking parchment...',
@@ -43,9 +41,7 @@ module.exports = {
       },
       {
         title: 'Teriyaki Chicken Casserole',
-        category: 'Chicken',
         categoryId: categoryMap['Chicken'],
-        area: 'Japanese',
         areaId: areaMap['Japanese'],
         instructions:
           'Preheat oven to 350° F. Spray a 9x13-inch baking pan with non-stick spray...',
@@ -60,9 +56,7 @@ module.exports = {
       },
       {
         title: 'Irish stew',
-        category: 'Beef',
         categoryId: categoryMap['Beef'],
-        area: 'Irish',
         areaId: areaMap['Irish'],
         instructions:
           'Heat the oven to 180C/350F/gas mark 4. Drain and rinse the soaked wheat...',
