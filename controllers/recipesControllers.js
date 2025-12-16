@@ -168,6 +168,9 @@ export const createRecipe = async (req, res, next) => {
     let thumbUrl = value.thumb;
     if (req.file) {
       const result = await uploadImageToCloudinary(req.file.buffer, 'recipes');
+      if (!result || !result.secure_url) {
+        throw HttpError(500, 'Failed to upload image to Cloudinary');
+      }
       thumbUrl = result.secure_url;
     }
 
