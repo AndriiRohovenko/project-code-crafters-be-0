@@ -27,14 +27,14 @@ class RecipeDTO {
     this.title = recipeData.title;
 
     /**
-     * @type {string}
+     * @type {number}
      */
-    this.category = recipeData.category;
+    this.categoryId = recipeData.categoryId;
 
     /**
-     * @type {string}
+     * @type {number}
      */
-    this.area = recipeData.area;
+    this.areaId = recipeData.areaId;
 
     /**
      * @type {string}
@@ -55,16 +55,6 @@ class RecipeDTO {
      * @type {number}
      */
     this.time = recipeData.time;
-
-    /**
-     * @type {number}
-     */
-    this.categoryId = recipeData.categoryId;
-
-    /**
-     * @type {number}
-     */
-    this.areaId = recipeData.areaId;
 
     /**
      * @type {{id: number, name: string, avatar: string} | null}
