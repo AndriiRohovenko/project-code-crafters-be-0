@@ -14,14 +14,6 @@ const Recipe = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    area: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     categoryId: {
       type: DataTypes.INTEGER,
       allowNull: true,

@@ -70,13 +70,13 @@ const options = {
               type: 'string',
               description: 'Назва рецепта',
             },
-            category: {
-              type: 'string',
-              description: 'Категорія рецепта',
+            categoryId: {
+              type: 'integer',
+              description: 'ID категорії рецепта',
             },
-            area: {
-              type: 'string',
-              description: 'Регіон кухні',
+            areaId: {
+              type: 'integer',
+              description: 'ID регіону кухні',
             },
             instructions: {
               type: 'string',
