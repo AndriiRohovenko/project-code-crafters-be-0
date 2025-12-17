@@ -2,6 +2,7 @@ import * as RecipesService from '../services/recipesServices.js';
 import RecipeDTO from '../dtos/RecipeDTO.js';
 import { createRecipeSchema } from '../schemas/recipeSchemas.js';
 import HttpError from '../helpers/HttpError.js';
+import uploadImageToCloudinary from '../services/cloudinary.js';
 import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 /**
@@ -113,16 +114,69 @@ export const deleteRecipe = ctrlWrapper(async (req, res) => {
 /**
  * Create a new recipe (private endpoint)
  */
-export const createRecipe = ctrlWrapper(async (req, res) => {
-  const { error, value } = createRecipeSchema.validate(req.body, {
-    abortEarly: false,
-  });
+export const createRecipe = async (req, res, next) => {
+  try {
+    // Parse ingredients if it's a string (from FormData)
+    if (req.body.ingredients && typeof req.body.ingredients === 'string') {
+      try {
+        const trimmed = req.body.ingredients.trim();
+        if (trimmed) {
+          req.body.ingredients = JSON.parse(trimmed);
+        } else {
+          req.body.ingredients = undefined;
+        }
+      } catch {
+        throw HttpError(
+          400,
+          `Invalid ingredients format. Must be valid JSON array. Received: ${req.body.ingredients}`
+        );
+      }
+    }
 
-  if (error) {
-    const errorMessage = error.details
-      .map((detail) => detail.message)
-      .join(', ');
-    throw HttpError(400, errorMessage);
+    // Convert numeric string fields to numbers (from FormData)
+    if (req.body.categoryId)
+      req.body.categoryId = parseInt(req.body.categoryId);
+    if (req.body.areaId) req.body.areaId = parseInt(req.body.areaId);
+    if (req.body.time) req.body.time = parseInt(req.body.time);
+
+    const { error, value } = createRecipeSchema.validate(req.body, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      const errorMessage = error.details
+        .map((detail) => detail.message)
+        .join(', ');
+      throw HttpError(400, errorMessage);
+    }
+
+    // Get user ID from authenticated request
+    const userId = req.user.id;
+
+    // Upload image to Cloudinary if file is provided
+    let thumbUrl = value.thumb;
+    if (req.file) {
+      const result = await uploadImageToCloudinary(req.file.buffer, 'recipes');
+      if (!result || !result.secure_url) {
+        throw HttpError(500, 'Failed to upload image to Cloudinary');
+      }
+      thumbUrl = result.secure_url;
+    }
+
+    // Create recipe with uploaded image URL
+    const recipe = await RecipesService.createRecipe(
+      { ...value, thumb: thumbUrl },
+      userId
+    );
+
+    const recipeDTO = new RecipeDTO(recipe);
+
+    res.status(201).json({
+      status: 'success',
+      data: { recipe: recipeDTO },
+    });
+  } catch (error) {
+    next(error);
   }
 
   // Get user ID from authenticated request
