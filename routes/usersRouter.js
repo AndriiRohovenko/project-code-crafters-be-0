@@ -58,7 +58,11 @@ const usersRouter = express.Router();
  *                 total:
  *                   type: integer
  */
-usersRouter.get('/', validateQuery(getUsersQuerySchema), usersControllers.getAllUsers);
+usersRouter.get(
+  '/',
+  validateQuery(getUsersQuerySchema),
+  usersControllers.getAllUsers
+);
 
 /**
  * @swagger
@@ -92,15 +96,29 @@ usersRouter.get('/current', authenticate, usersControllers.getCurrentUser);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Номер сторінки
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 5
+ *         description: Кількість елементів на сторінці
  *     responses:
  *       200:
- *         description: Список підписок
+ *         description: Список підписок з пагінацією
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/PaginatedFollowingResponse'
  *       401:
  *         description: Не авторизовано
  *         content:
@@ -307,15 +325,28 @@ usersRouter.get('/:id', usersControllers.getUserById);
  *         schema:
  *           type: integer
  *         description: ID користувача
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Номер сторінки
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 5
+ *         description: Кількість елементів на сторінці
  *     responses:
  *       200:
- *         description: Список підписників
+ *         description: Список підписників з пагінацією
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/PaginatedFollowersResponse'
  *       401:
  *         description: Не авторизовано
  *         content:
