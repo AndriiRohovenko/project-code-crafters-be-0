@@ -279,6 +279,131 @@ const options = {
             },
           },
         },
+
+        RecipePreviewDTO: {
+          type: 'object',
+          required: ['id', 'title', 'image'],
+          properties: {
+            id: {
+              type: 'integer',
+              description: 'ID рецепта (превʼю)',
+              example: 12,
+            },
+            title: {
+              type: 'string',
+              description: 'Назва рецепта (превʼю)',
+              example: 'Pancakes',
+            },
+            image: {
+              type: 'string',
+              nullable: true,
+              description: 'URL thumb (превʼю)',
+              example: 'https://example.com/thumb.jpg',
+            },
+          },
+        },
+
+        FollowUserDTO: {
+          allOf: [
+            { $ref: '#/components/schemas/User' },
+            {
+              type: 'object',
+              required: ['recipesCount', 'recipesPreview'],
+              properties: {
+                // якщо хочеш, можеш додати nullable: true до avatar в User, але це окрема тема
+                recipesCount: {
+                  type: 'integer',
+                  description: 'Кількість рецептів користувача',
+                  example: 7,
+                },
+                recipesPreview: {
+                  type: 'array',
+                  description: 'Превʼю рецептів (до 4)',
+                  items: { $ref: '#/components/schemas/RecipePreviewDTO' },
+                },
+              },
+            },
+          ],
+        },
+
+        FollowerUserDTO: {
+          allOf: [
+            { $ref: '#/components/schemas/FollowUserDTO' },
+            {
+              type: 'object',
+              required: ['isFollowing'],
+              properties: {
+                isFollowing: {
+                  type: 'boolean',
+                  description:
+                    'Чи підписаний поточний користувач на цього юзера',
+                  example: true,
+                },
+              },
+            },
+          ],
+        },
+
+        PaginationQuery: {
+          type: 'object',
+          properties: {
+            page: {
+              type: 'integer',
+              minimum: 1,
+              default: 1,
+              description: 'Номер сторінки',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 5,
+              description: 'Кількість елементів на сторінці',
+            },
+          },
+        },
+
+        PaginatedFollowingResponse: {
+          type: 'object',
+          required: [
+            'data',
+            'totalItems',
+            'totalPages',
+            'currentPage',
+            'itemsPerPage',
+          ],
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/FollowUserDTO' },
+            },
+            totalItems: { type: 'integer', example: 42 },
+            totalPages: { type: 'integer', example: 9 },
+            currentPage: { type: 'integer', example: 1 },
+            itemsPerPage: { type: 'integer', example: 5 },
+          },
+        },
+
+        PaginatedFollowersResponse: {
+          type: 'object',
+          required: [
+            'data',
+            'totalItems',
+            'totalPages',
+            'currentPage',
+            'itemsPerPage',
+          ],
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/FollowerUserDTO' },
+            },
+            totalItems: { type: 'integer', example: 42 },
+            totalPages: { type: 'integer', example: 9 },
+            currentPage: { type: 'integer', example: 1 },
+            itemsPerPage: { type: 'integer', example: 5 },
+          },
+        },
       },
     },
     security: [],
