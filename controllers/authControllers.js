@@ -4,6 +4,7 @@ import {
   loginUserService,
   logoutUserService,
 } from '../services/authServices.js';
+import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 /**
  * Create a new user.
@@ -15,7 +16,7 @@ import {
  * @param {import("express").Response} res - Express response object
  * @returns {Promise<void>}
  */
-export const createUserController = async (req, res) => {
+export const createUserController = ctrlWrapper(async (req, res) => {
   const { email } = req.body;
   const normalizedEmail = normalizeEmail(email);
 
@@ -25,7 +26,7 @@ export const createUserController = async (req, res) => {
   });
 
   return res.status(201).json({ token });
-};
+});
 
 /**
  * Login user.
@@ -37,7 +38,7 @@ export const createUserController = async (req, res) => {
  * @param {import("express").Response} res - Express response object
  * @returns {Promise<void>}
  */
-export const loginUserController = async (req, res) => {
+export const loginUserController = ctrlWrapper(async (req, res) => {
   const { email } = req.body;
   const normalizedEmail = normalizeEmail(email);
 
@@ -47,7 +48,7 @@ export const loginUserController = async (req, res) => {
   });
 
   res.json({ token });
-};
+});
 
 /**
  * Logout user
@@ -59,8 +60,8 @@ export const loginUserController = async (req, res) => {
  * @param {Object} res - Express response object
  * @returns {void} - Responds with HTTP 204 No Content on success
  */
-export const logoutUserController = async (req, res) => {
+export const logoutUserController = ctrlWrapper(async (req, res) => {
   await logoutUserService(req.user);
 
   res.status(204).send();
-};
+});

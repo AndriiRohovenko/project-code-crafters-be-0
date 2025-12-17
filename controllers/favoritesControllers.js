@@ -10,6 +10,7 @@ import {
   MIN_LIMIT,
   MIN_PAGE,
 } from '../constants/paginationConstants.js';
+import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 /**
  * Get favorite recipes for the authenticated user (with pagination).
@@ -17,7 +18,7 @@ import {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-export const getFavoriteRecipesController = async (req, res) => {
+export const getFavoriteRecipesController = ctrlWrapper(async (req, res) => {
   const rawPage = Number(req.query.page) || DEFAULT_PAGE;
   const rawLimit = Number(req.query.limit) || DEFAULT_LIMIT;
 
@@ -41,7 +42,7 @@ export const getFavoriteRecipesController = async (req, res) => {
       itemsPerPage: limit,
     },
   });
-};
+});
 
 /**
  * Add recipe to user's favorites.
@@ -49,7 +50,7 @@ export const getFavoriteRecipesController = async (req, res) => {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-export const addFavoriteRecipeController = async (req, res) => {
+export const addFavoriteRecipeController = ctrlWrapper(async (req, res) => {
   const { recipeId } = req.params;
   const userId = req.user.id;
 
@@ -58,7 +59,7 @@ export const addFavoriteRecipeController = async (req, res) => {
   const dto = new RecipeDTO(recipe);
 
   res.status(201).json(dto);
-};
+});
 
 /**
  * Remove recipe from user's favorites.
@@ -67,11 +68,11 @@ export const addFavoriteRecipeController = async (req, res) => {
  * @param {import('express').Response} res
  * @returns {Promise<void>}
  */
-export const removeFavoriteRecipeController = async (req, res) => {
+export const removeFavoriteRecipeController = ctrlWrapper(async (req, res) => {
   const { recipeId } = req.params;
   const userId = req.user.id;
 
   await removeFavoriteRecipeService(userId, recipeId);
 
   res.status(204).send();
-};
+});
