@@ -404,6 +404,31 @@ const options = {
             itemsPerPage: { type: 'integer', example: 5 },
           },
         },
+
+        PaginationMeta: {
+          type: 'object',
+          required: ['totalItems', 'totalPages', 'currentPage', 'itemsPerPage'],
+          properties: {
+            totalItems: { type: 'integer', example: 42 },
+            totalPages: { type: 'integer', example: 9 },
+            currentPage: { type: 'integer', example: 1 },
+            itemsPerPage: { type: 'integer', example: 10 },
+          },
+        },
+
+        PaginatedFavoritesResponse: {
+          type: 'object',
+          required: ['data', 'meta'],
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Recipe' },
+            },
+            meta: {
+              $ref: '#/components/schemas/PaginationMeta',
+            },
+          },
+        },
       },
     },
     security: [],
