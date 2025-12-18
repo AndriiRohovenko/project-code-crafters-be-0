@@ -1,3 +1,10 @@
+// Load dotenv only if available (development)
+try {
+  await import('dotenv/config');
+} catch (error) {
+  // dotenv not available - use environment variables directly
+}
+
 import sequelize from './db/sequelize.js';
 
 (async () => {
