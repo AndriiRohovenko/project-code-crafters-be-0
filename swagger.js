@@ -12,12 +12,8 @@ const options = {
         url: 'https://github.com/AndriiRohovenko/project-code-crafters-be-0',
       },
     },
-    servers: [
-      {
-        url: 'http://localhost:3000',
-        description: 'Development server',
-      },
-    ],
+    // No servers specified - Swagger will automatically use the current host
+    servers: [],
     components: {
       securitySchemes: {
         bearerAuth: {
