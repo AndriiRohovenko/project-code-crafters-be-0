@@ -50,7 +50,12 @@ app.get('/', (req, res) => {
 
 app.use(notFoundHandler);
 app.use(errorHandler);
-await syncDB();
+
+// Sync database only in development (use migrations in production)
+if (process.env.NODE_ENV !== 'production') {
+  await syncDB();
+}
+
 await connectDB();
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
