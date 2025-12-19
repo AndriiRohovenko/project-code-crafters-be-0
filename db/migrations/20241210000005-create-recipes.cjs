@@ -14,13 +14,25 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      category: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'categories',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
-      area: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      areaId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'areas',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       instructions: {
         type: Sequelize.TEXT,
@@ -61,8 +73,8 @@ module.exports = {
     });
 
     await queryInterface.addIndex('recipes', ['title']);
-    await queryInterface.addIndex('recipes', ['category']);
-    await queryInterface.addIndex('recipes', ['area']);
+    await queryInterface.addIndex('recipes', ['categoryId']);
+    await queryInterface.addIndex('recipes', ['areaId']);
     await queryInterface.addIndex('recipes', ['userId']);
   },
 

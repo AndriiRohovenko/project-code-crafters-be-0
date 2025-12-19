@@ -1,8 +1,3 @@
-// Load dotenv only in development
-if (process.env.NODE_ENV !== 'production') {
-  await import('dotenv/config');
-}
-
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';

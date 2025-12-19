@@ -1,28 +1,23 @@
+// Load dotenv only if available (development)
+try {
+  await import('dotenv/config');
+} catch (error) {
+  // dotenv not available - use environment variables directly
+}
+
 import sequelize from './db/sequelize.js';
 
 (async () => {
   try {
     console.log('Resetting database...');
     
-    // Truncate all tables and reset sequences
-    await sequelize.query(`
-      TRUNCATE TABLE 
-        users, 
-        areas, 
-        categories, 
-        ingredients, 
-        recipes, 
-        recipe_ingredients, 
-        testimonials, 
-        favorites, 
-        followers 
-      RESTART IDENTITY CASCADE
-    `);
+    // Drop all tables (this also removes indexes)
+    await sequelize.query('DROP SCHEMA public CASCADE');
+    await sequelize.query('CREATE SCHEMA public');
+    await sequelize.query('GRANT ALL ON SCHEMA public TO postgres');
+    await sequelize.query('GRANT ALL ON SCHEMA public TO public');
     
-    // Reset seeder metadata
-    await sequelize.query('DELETE FROM "SequelizeMeta" WHERE name LIKE \'%seed%\'');
-    
-    console.log('✓ Database reset complete');
+    console.log('✓ Database reset complete (all tables and indexes dropped)');
     await sequelize.close();
     process.exit(0);
   } catch (error) {
