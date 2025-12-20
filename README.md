@@ -83,6 +83,7 @@ npm run db:reseed
 ✅ **Готово!** PostgreSQL та pgAdmin запущені.
 
 **Доступ до pgAdmin:** http://localhost:5050
+
 - Email: `admin@foodies.com`
 - Password: `admin`
 
@@ -295,21 +296,25 @@ curl -X POST http://localhost:3000/api/auth/login \
 ## 🔧 Скрипти
 
 **Сервер:**
+
 - `npm start` - Запуск сервера в продакшн режимі
 - `npm run dev` - Запуск сервера в режимі розробки з nodemon
 
 **База даних - Міграції:**
+
 - `npm run db:migrate` - Запуск міграцій бази даних
 - `npm run db:migrate:undo` - Відкат останньої міграції
 - `npm run db:migrate:undo:all` - Відкат всіх міграцій
 
 **База даних - Seeders:**
+
 - `npm run db:seed:all` - Запуск всіх seeders
 - `npm run db:seed:undo:all` - Відкат всіх seeders
 - `npm run db:reseed` - ⭐ Скинути БД, запустити міграції та seeders (рекомендовано)
 - `npm run db:reset` - Видалити всі таблиці та індекси
 
 **Якість коду:**
+
 - `npm run lint` - Перевірка коду з ESLint
 - `npm run format` - Форматування коду з Prettier
 
@@ -318,6 +323,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ## 🐳 Docker Setup (детально)
 
 ### Переваги Docker:
+
 - ✅ Швидке розгортання без установки PostgreSQL
 - ✅ Ізольоване середовище
 - ✅ Легке видалення
@@ -339,6 +345,7 @@ docker-compose up -d
 ```
 
 Це запустить:
+
 - **PostgreSQL** на порту `5432`
 - **pgAdmin** на порту `5050` (веб-інтерфейс)
 
@@ -465,6 +472,7 @@ npm run db:reseed
 ### 9 таблиць:
 
 **1. users** - користувачі системи
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - name (STRING)
 - email (STRING, UNIQUE)
@@ -473,16 +481,19 @@ npm run db:reseed
 - createdAt, updatedAt
 
 **2. areas** - кухні світу
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - name (STRING, UNIQUE)
 - createdAt, updatedAt
 
 **3. categories** - категорії рецептів
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - name (STRING, UNIQUE)
 - createdAt, updatedAt
 
 **4. ingredients** - інгредієнти
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - name (STRING)
 - desc (TEXT, nullable) ⭐ новое поле
@@ -490,6 +501,7 @@ npm run db:reseed
 - createdAt, updatedAt
 
 **5. recipes** - рецепти
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - title (STRING)
 - categoryId (INTEGER, FOREIGN KEY -> categories.id) ⭐
@@ -502,6 +514,7 @@ npm run db:reseed
 - createdAt, updatedAt
 
 **6. recipe_ingredients** - зв'язок рецептів та інгредієнтів
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - recipeId (INTEGER, FOREIGN KEY -> recipes.id)
 - ingredientId (INTEGER, FOREIGN KEY -> ingredients.id)
@@ -509,12 +522,14 @@ npm run db:reseed
 - createdAt, updatedAt
 
 **7. testimonials** - відгуки
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - ownerId (INTEGER, FOREIGN KEY -> users.id)
 - testimonial (TEXT)
 - createdAt, updatedAt
 
 **8. followers** - підписки користувачів
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - userId (INTEGER, FOREIGN KEY -> users.id)
 - followerId (INTEGER, FOREIGN KEY -> users.id)
@@ -522,6 +537,7 @@ npm run db:reseed
 - UNIQUE constraint на (userId, followerId)
 
 **9. favorites** - улюблені рецепти
+
 - id (INTEGER, AUTO_INCREMENT, PRIMARY KEY)
 - userId (INTEGER, FOREIGN KEY -> users.id)
 - recipeId (INTEGER, FOREIGN KEY -> recipes.id)

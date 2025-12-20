@@ -30,7 +30,7 @@ module.exports = {
     await queryInterface.addIndex('categories', ['name']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('categories');
   },
 };

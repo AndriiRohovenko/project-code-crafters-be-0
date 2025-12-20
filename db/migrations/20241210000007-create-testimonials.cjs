@@ -39,7 +39,7 @@ module.exports = {
     await queryInterface.addIndex('testimonials', ['ownerId']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('testimonials');
   },
 };

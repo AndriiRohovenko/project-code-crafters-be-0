@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     // Отримуємо ID користувачів
     const [users] = await queryInterface.sequelize.query(
       `SELECT id, email FROM users ORDER BY id LIMIT 3`
@@ -42,7 +42,7 @@ module.exports = {
     await queryInterface.bulkInsert('testimonials', testimonials, {});
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.bulkDelete('testimonials', null, {});
   },
 };

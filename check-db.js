@@ -14,7 +14,7 @@ import Testimonial from './db/models/Testimonial.js';
       users: await User.count(),
       ingredients: await Ingredient.count(),
       recipes: await Recipe.count(),
-      testimonials: await Testimonial.count()
+      testimonials: await Testimonial.count(),
     };
     console.log('Database records:');
     console.log(JSON.stringify(counts, null, 2));

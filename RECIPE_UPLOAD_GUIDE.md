@@ -1,6 +1,7 @@
 # Гайд по створенню рецепту з завантаженням зображення
 
 ## Ендпоінт
+
 `POST /api/recipes`
 
 **Авторизація:** Bearer Token (обов'язково)
@@ -19,18 +20,19 @@
 
 #### Поля форми:
 
-| Key | Value | Type |
-|-----|-------|------|
-| `title` | "Pasta Carbonara" | Text |
-| `categoryId` | 1 | Text |
-| `areaId` | 2 | Text |
+| Key            | Value                                                                                                            | Type |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | ---- |
+| `title`        | "Pasta Carbonara"                                                                                                | Text |
+| `categoryId`   | 1                                                                                                                | Text |
+| `areaId`       | 2                                                                                                                | Text |
 | `instructions` | "Cook pasta until al dente. Fry bacon until crispy. Mix pasta with bacon and eggs. Season with salt and pepper." | Text |
-| `description` | "Classic Italian pasta dish with creamy sauce" | Text |
-| `time` | 25 | Text |
-| `ingredients` | `[{"ingredientId":1,"measure":"400g"},{"ingredientId":2,"measure":"200g"}]` | Text |
-| `thumb` | (вибрати файл зображення) | File |
+| `description`  | "Classic Italian pasta dish with creamy sauce"                                                                   | Text |
+| `time`         | 25                                                                                                               | Text |
+| `ingredients`  | `[{"ingredientId":1,"measure":"400g"},{"ingredientId":2,"measure":"200g"}]`                                      | Text |
+| `thumb`        | (вибрати файл зображення)                                                                                        | File |
 
 **Важливо:**
+
 - `ingredients` має бути JSON stringified масивом
 - `thumb` - вибрати File type та завантажити зображення (max 5MB, JPG/PNG)
 
@@ -41,12 +43,14 @@
 ### Якщо не потрібно завантажувати зображення
 
 **Headers:**
+
 ```
 Content-Type: application/json
 Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
 **Body (JSON):**
+
 ```json
 {
   "title": "Pasta Carbonara",
@@ -73,6 +77,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ## Варіант 3: cURL команда
 
 ### З файлом:
+
 ```bash
 curl -X POST http://localhost:3000/api/recipes \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -87,6 +92,7 @@ curl -X POST http://localhost:3000/api/recipes \
 ```
 
 ### Без файлу (JSON):
+
 ```bash
 curl -X POST http://localhost:3000/api/recipes \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
@@ -110,10 +116,12 @@ curl -X POST http://localhost:3000/api/recipes \
 ## Поля запиту
 
 ### Обов'язкові:
+
 - **title** (string, 3-255 символів) - Назва рецепту
 - **instructions** (string, мін. 10 символів) - Інструкції приготування
 
 ### Опціональні:
+
 - **categoryId** (integer) - ID категорії
 - **areaId** (integer) - ID регіону кухні
 - **description** (string, max 1000 символів) - Опис рецепту
@@ -122,6 +130,7 @@ curl -X POST http://localhost:3000/api/recipes \
 - **ingredients** (array/string) - Масив інгредієнтів (у FormData - JSON string)
 
 ### Формат ingredients:
+
 ```json
 [
   {
@@ -140,6 +149,7 @@ curl -X POST http://localhost:3000/api/recipes \
 ## Відповідь
 
 ### Успіх (201 Created):
+
 ```json
 {
   "status": "success",
@@ -177,6 +187,7 @@ curl -X POST http://localhost:3000/api/recipes \
 ### Помилки:
 
 **400 Bad Request** - Невалідні дані
+
 ```json
 {
   "message": "Title must be at least 3 characters long"
@@ -184,6 +195,7 @@ curl -X POST http://localhost:3000/api/recipes \
 ```
 
 **401 Unauthorized** - Відсутній або невалідний токен
+
 ```json
 {
   "message": "Not authorized"

@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     const areas = [
       { name: 'Ukrainian' },
       { name: 'Italian' },
@@ -43,7 +43,7 @@ module.exports = {
     await queryInterface.bulkInsert('areas', areasWithTimestamps, {});
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.bulkDelete('areas', null, {});
   },
 };
