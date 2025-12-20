@@ -5,16 +5,16 @@
  */
 const validateBody = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.body, { 
+    const { error, value } = schema.validate(req.body, {
       abortEarly: false,
-      stripUnknown: true 
+      stripUnknown: true,
     });
-    
+
     if (error) {
       error.isJoi = true;
       return next(error);
     }
-    
+
     // Замінюємо req.body на валідовані дані
     req.body = value;
     next();
@@ -28,16 +28,16 @@ const validateBody = (schema) => {
  */
 export const validateQuery = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.query, { 
+    const { error, value } = schema.validate(req.query, {
       abortEarly: false,
-      stripUnknown: true 
+      stripUnknown: true,
     });
-    
+
     if (error) {
       error.isJoi = true;
       return next(error);
     }
-    
+
     // Create new object with validated values
     Object.assign(req.query, value);
     next();
@@ -51,15 +51,15 @@ export const validateQuery = (schema) => {
  */
 export const validateParams = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.params, { 
-      abortEarly: false 
+    const { error, value } = schema.validate(req.params, {
+      abortEarly: false,
     });
-    
+
     if (error) {
       error.isJoi = true;
       return next(error);
     }
-    
+
     req.params = value;
     next();
   };
