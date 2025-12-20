@@ -1,7 +1,7 @@
 // Load dotenv only if available (development)
 try {
   require('dotenv').config();
-} catch (error) {
+} catch {
   // dotenv not available in production - use environment variables directly
 }
 

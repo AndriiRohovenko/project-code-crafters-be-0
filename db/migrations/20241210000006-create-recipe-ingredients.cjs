@@ -50,7 +50,7 @@ module.exports = {
     await queryInterface.addIndex('recipe_ingredients', ['ingredientId']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('recipe_ingredients');
   },
 };

@@ -78,7 +78,7 @@ module.exports = {
     await queryInterface.addIndex('recipes', ['userId']);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('recipes');
   },
 };

@@ -15,13 +15,14 @@ import HttpError from '../helpers/HttpError.js';
 throw HttpError(404, 'User not found');
 
 // З деталями
-throw HttpError(400, 'Validation failed', { 
-  field: 'email', 
-  reason: 'Invalid format' 
+throw HttpError(400, 'Validation failed', {
+  field: 'email',
+  reason: 'Invalid format',
 });
 ```
 
 **Підтримувані статус коди:**
+
 - `400` - Bad Request
 - `401` - Unauthorized
 - `403` - Forbidden
@@ -47,6 +48,7 @@ export const getUser = ctrlWrapper(async (req, res) => {
 ```
 
 **Переваги:**
+
 - Немає потреби в try-catch в кожному контролері
 - Автоматична передача помилок в error handler
 - Чистіший та читабельніший код
@@ -56,7 +58,10 @@ export const getUser = ctrlWrapper(async (req, res) => {
 Middleware для валідації даних через Joi.
 
 ```javascript
-import validateBody, { validateQuery, validateParams } from '../helpers/validateBody.js';
+import validateBody, {
+  validateQuery,
+  validateParams,
+} from '../helpers/validateBody.js';
 import { userSchema } from '../schemas/userSchemas.js';
 
 // Валідація body
@@ -74,6 +79,7 @@ router.get('/users/:id', validateParams(paramsSchema), getUser);
 Централізований обробник всіх помилок.
 
 **Обробляє:**
+
 - Sequelize ValidationError
 - Sequelize UniqueConstraintError
 - Sequelize ForeignKeyConstraintError
@@ -178,15 +184,15 @@ POST /users
 ```javascript
 export const deleteUser = ctrlWrapper(async (req, res) => {
   const user = await User.findByPk(req.params.id);
-  
+
   if (!user) {
     throw HttpError(404, 'User not found');
   }
-  
+
   if (user.role === 'admin') {
     throw HttpError(403, 'Cannot delete admin user');
   }
-  
+
   await user.destroy();
   res.status(204).send();
 });
@@ -322,7 +328,7 @@ import app from '../app.js';
 describe('Error Handling', () => {
   it('should return 404 for non-existent route', async () => {
     const response = await request(app).get('/api/nonexistent');
-    
+
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty('status', 'error');
     expect(response.body).toHaveProperty('message', 'Route not found');
@@ -332,7 +338,7 @@ describe('Error Handling', () => {
     const response = await request(app)
       .post('/api/users')
       .send({ email: 'invalid' });
-    
+
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('status', 'error');
     expect(response.body).toHaveProperty('errors');

@@ -1,6 +1,11 @@
-import { ValidationError, UniqueConstraintError, ForeignKeyConstraintError, DatabaseError } from 'sequelize';
+import {
+  ValidationError,
+  UniqueConstraintError,
+  ForeignKeyConstraintError,
+  DatabaseError,
+} from 'sequelize';
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   // Логування помилки для розробки
   if (process.env.NODE_ENV === 'development') {
     console.error('Error:', {
@@ -15,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({
       status: 'error',
       message: 'Validation error',
-      errors: err.errors.map(e => ({
+      errors: err.errors.map((e) => ({
         field: e.path,
         message: e.message,
         value: e.value,
@@ -54,7 +59,7 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({
       status: 'error',
       message: 'Validation error',
-      errors: err.details.map(detail => ({
+      errors: err.details.map((detail) => ({
         field: detail.path.join('.'),
         message: detail.message,
       })),
@@ -63,7 +68,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Custom HTTP errors
   const { status = 500, message = 'Internal server error' } = err;
-  
+
   res.status(status).json({
     status: 'error',
     message,
