@@ -83,6 +83,29 @@ export const getUserRecipes = ctrlWrapper(async (req, res) => {
 });
 
 /**
+ * Get recipes by specific user ID (public endpoint)
+ */
+export const getRecipesByUserId = ctrlWrapper(async (req, res) => {
+  const { userId } = req.params;
+  const { page = 1, limit = 10 } = req.query;
+
+  const result = await RecipesService.getUserRecipes({
+    userId: parseInt(userId),
+    page: parseInt(page),
+    limit: parseInt(limit),
+  });
+
+  const recipesDTOs = result.recipes.map((recipe) => new RecipeDTO(recipe));
+
+  res.json({
+    recipes: recipesDTOs,
+    total: result.total,
+    page: result.page,
+    totalPages: result.totalPages,
+  });
+});
+
+/**
  * Delete user's own recipe (private endpoint)
  */
 export const deleteRecipe = ctrlWrapper(async (req, res) => {
