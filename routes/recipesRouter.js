@@ -28,6 +28,11 @@ const recipesRouter = express.Router();
  *           type: integer
  *         description: ID регіону кухні для фільтрації
  *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         description: ID користувача для фільтрації
+ *       - in: query
  *         name: page
  *         schema:
  *           type: integer
@@ -135,55 +140,6 @@ recipesRouter.get(
   authenticate,
   RecipesController.getUserRecipes
 );
-
-/**
- * @swagger
- * /api/recipes/user/{userId}:
- *   get:
- *     summary: Отримати рецепти конкретного користувача
- *     tags: [Recipes]
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID користувача
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           minimum: 1
- *           default: 1
- *         description: Номер сторінки
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           minimum: 1
- *           maximum: 100
- *           default: 10
- *         description: Кількість елементів на сторінці
- *     responses:
- *       200:
- *         description: Список рецептів користувача
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 recipes:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Recipe'
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
- */
-recipesRouter.get('/user/:userId', RecipesController.getRecipesByUserId);
 
 /**
  * @swagger
