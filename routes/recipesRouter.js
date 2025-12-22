@@ -13,10 +13,10 @@ const recipesRouter = express.Router();
  *     tags: [Recipes]
  *     parameters:
  *       - in: query
- *         name: query
+ *         name: ingredientId
  *         schema:
- *           type: string
- *         description: Пошуковий запит
+ *           type: integer
+ *         description: ID інгредієнта для фільтрації
  *       - in: query
  *         name: categoryId
  *         schema:
@@ -53,9 +53,18 @@ const recipesRouter = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Recipe'
+ *               type: object
+ *               properties:
+ *                 recipes:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Recipe'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
  */
 recipesRouter.get('/search', RecipesController.searchRecipes);
 
@@ -220,18 +229,13 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *             type: object
  *             required:
  *               - title
- *               - categoryId
  *               - instructions
- *               - ingredients
  *             properties:
  *               title:
  *                 type: string
  *                 minLength: 3
  *                 maxLength: 255
  *                 description: Назва рецепта
- *               image:
- *                 type: string
- *                 description: URL зображення рецепта
  *               categoryId:
  *                 type: integer
  *                 description: ID категорії рецепта
