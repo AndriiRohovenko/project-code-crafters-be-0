@@ -9,11 +9,12 @@ import {
 import sequelize from '../db/sequelize.js';
 
 /**
- * Search recipes by category, ingredient, and area with pagination
+ * Search recipes by category, ingredient, area, and user with pagination
  * @param {Object} filters - Search filters
  * @param {number} [filters.categoryId] - Category ID
  * @param {number} [filters.ingredientId] - Ingredient ID
  * @param {number} [filters.areaId] - Area ID
+ * @param {number} [filters.userId] - User ID
  * @param {number} [filters.page=1] - Page number
  * @param {number} [filters.limit=12] - Items per page
  * @returns {Promise<{recipes: Array, total: number, page: number, totalPages: number}>}
@@ -22,6 +23,7 @@ export const searchRecipes = async ({
   categoryId,
   ingredientId,
   areaId,
+  userId,
   page = 1,
   limit = 12,
 }) => {
@@ -60,6 +62,11 @@ export const searchRecipes = async ({
   // Filter by area
   if (areaId) {
     where.areaId = areaId;
+  }
+
+  // Filter by user
+  if (userId) {
+    where.userId = userId;
   }
 
   // Filter by ingredient - need to use include with required: true

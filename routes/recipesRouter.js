@@ -28,6 +28,11 @@ const recipesRouter = express.Router();
  *           type: integer
  *         description: ID регіону кухні для фільтрації
  *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: integer
+ *         description: ID користувача для фільтрації
+ *       - in: query
  *         name: page
  *         schema:
  *           type: integer

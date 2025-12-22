@@ -6,15 +6,23 @@ import uploadImageToCloudinary from '../services/cloudinary.js';
 import ctrlWrapper from '../helpers/ctrlWrapper.js';
 
 /**
- * Search recipes by category, ingredient, and area with pagination
+ * Search recipes by category, ingredient, area, and user with pagination
  */
 export const searchRecipes = ctrlWrapper(async (req, res) => {
-  const { categoryId, ingredientId, areaId, page = 1, limit = 12 } = req.query;
+  const {
+    categoryId,
+    ingredientId,
+    areaId,
+    userId,
+    page = 1,
+    limit = 12,
+  } = req.query;
 
   const result = await RecipesService.searchRecipes({
     categoryId: categoryId ? parseInt(categoryId) : undefined,
     ingredientId: ingredientId ? parseInt(ingredientId) : undefined,
     areaId: areaId ? parseInt(areaId) : undefined,
+    userId: userId ? parseInt(userId) : undefined,
     page: parseInt(page),
     limit: parseInt(limit),
   });
