@@ -220,25 +220,24 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *             type: object
  *             required:
  *               - title
-
  *               - categoryId
-
  *               - instructions
+ *               - ingredients
  *             properties:
  *               title:
  *                 type: string
  *                 minLength: 3
  *                 maxLength: 255
  *                 description: Назва рецепта
-
-
+ *               image:
+ *                 type: string
+ *                 description: URL зображення рецепта
  *               categoryId:
  *                 type: integer
  *                 description: ID категорії рецепта
  *               areaId:
  *                 type: integer
  *                 description: ID регіону кухні
-
  *               instructions:
  *                 type: string
  *                 minLength: 10
@@ -260,7 +259,7 @@ recipesRouter.delete('/:id', authenticate, RecipesController.deleteRecipe);
  *                 example: 30
  *               ingredients:
  *                 type: string
- *                 description: JSON масив інгредієнтів (stringified)
+ *                 description: JSON масив інгредієнтів (stringified). Кожен інгредієнт має містити ingredientId та measure
  *                 example: '[{"ingredientId":5,"measure":"400g"},{"ingredientId":10,"measure":"200g"}]'
  *     responses:
  *       201:
